@@ -1,0 +1,24 @@
+{
+  "name": "mongodb",
+  "description": "Installs MongoDB server",
+  "license": "Apache 2.0",
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.0.1"
+}

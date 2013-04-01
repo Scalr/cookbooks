@@ -1,0 +1,4 @@
+[facebook]
+name=Facebook Centos repo mirror
+baseurl=http://centos.mirror.facebook.net/$releasever/os/$basearch/
+enabled=1

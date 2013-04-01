@@ -1,0 +1,35 @@
+# /etc/nginx/conf.d/scalarizr_gate.conf
+#
+# Config for proxy server that redirects requests to given server 
+# in 'reciever-addr' header
+#
+
+server {
+    <% @scalarizr_ports.each do |port| -%>
+    listen <%= port %>;
+    <% end -%>
+
+    server_name scalarizr_gate;
+
+    charset utf-8;
+
+    access_log  /var/log/nginx/scalarizr_gate.log;
+    error_log  /var/log/nginx/scalarizr_gate.error.log;
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+
+    location / {
+        # allowing connections only from known scalr servers
+        <% @scalr_whitelist.each do |addr| -%>
+        allow <%= addr %>;
+        <% end -%>
+        deny all;
+        
+        proxy_pass  http://$http_x_receiver_addr:$server_port;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_set_header        Host            $host;
+        proxy_set_header        X-Real-IP       $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+   }
+}

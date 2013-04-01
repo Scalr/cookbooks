@@ -1,0 +1,7 @@
+<VirtualHost *:80>
+    DocumentRoot /home/mysite/public
+    <Directory /home/mysite/public>
+        Allow from all
+        Options -MultiViews
+    </Directory>
+</VirtualHost>
