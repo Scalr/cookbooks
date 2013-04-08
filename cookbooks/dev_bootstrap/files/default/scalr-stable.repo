@@ -6,6 +6,6 @@ gpgcheck=0
 
 [scalr-trunk]
 name=scalr-trunk
-baseurl=http://buildbot.scalr-labs.com/rpm/trunk/rhel/$releasever/$basearch
+baseurl=http://buildbot.scalr-labs.com/rpm/master/rhel/$releasever/$basearch
 enabled=1
 gpgcheck=0
