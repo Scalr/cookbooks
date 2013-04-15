@@ -19,7 +19,7 @@ when "ubuntu","debian"
 		action [ :disable, :stop ]
 	end
 
-when "redhat","centos","oracle"
+when "redhat","centos","oracle","amazon"
   
 	if node[:platform_version].to_f < 6.0
 		remote_file "/tmp/scalr-release-2-1.noarch.rpm" do

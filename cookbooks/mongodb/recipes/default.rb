@@ -17,7 +17,7 @@ when "ubuntu", "debian"
 		action [ :disable, :stop ]
 	end
 	
-when "redhat","centos","oracle"
+when "redhat","centos","oracle","amazon"
 	if ['i686', 'i586', 'i386'].include?(node[:kernel][:machine])
 		arch = "x86"
 	else

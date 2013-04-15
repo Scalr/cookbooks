@@ -22,7 +22,7 @@ package "memcached" do
 end
 
 case node[:platform]
-  when "redhat","centos","oracle"
+  when "redhat","centos","oracle","amazon"
     package "libmemcached-devel" do
       action :upgrade
     end

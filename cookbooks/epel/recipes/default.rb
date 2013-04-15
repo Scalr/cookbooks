@@ -10,6 +10,10 @@
 
 case node[:platform]
 when "redhat","centos","oracle","scientific","amazon"
+	package "epel-release" do
+		action :purge 
+		only_if "rpm -q epel-release"
+	end
 
 	epel_rpm = "http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm"
 
@@ -27,6 +31,7 @@ when "redhat","centos","oracle","scientific","amazon"
 		action :install
 		source "/tmp/epel.rpm"
 		provider Chef::Provider::Package::Rpm
+		not_if 
 	end
 	
 end

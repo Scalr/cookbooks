@@ -20,7 +20,7 @@ when "debian","ubuntu"
     execute "apt-get update"
     package "scalarizr-devtools"
 
-when "redhat","centos","oracle"
+when "redhat","centos","oracle","amazon"
 
   if node[:platform_version] < "6.0"
     yum_package "python26"
