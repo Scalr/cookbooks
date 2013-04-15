@@ -18,7 +18,7 @@
 #
 
 case node[:platform]
-when "centos","redhat","oracle"
+when "centos","redhat","oracle","amazon"
   package "mod_ssl"
 when "debian","ubuntu"
   execute "a2enmod ssl"

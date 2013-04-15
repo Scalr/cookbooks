@@ -21,7 +21,7 @@ case node[:platform]
 when "debian","ubuntu"
 	package "libapache2-mod-rpaf"
 
-when "redhat","centos","oracle"
+when "redhat","centos","oracle","amazon"
 	remote_file "/tmp/scalr-release-2-1.noarch.rpm" do
 		source "http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm"
 		mode "0644"
