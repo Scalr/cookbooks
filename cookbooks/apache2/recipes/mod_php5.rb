@@ -24,9 +24,9 @@ when "debian", "ubuntu"
   package "php5-suhosin"
   package "libapache2-mod-php5"
 
-when "centos", "redhat", "oracle"
+when "centos", "redhat", "oracle", "amazon"
   package "php" do
-    if node[:platform] == "centos" and node[:platform_version].to_f < 6.0:
+    if node[:platform] == "centos" and node[:platform_version].to_f < 6.0
       package_name "php53"
     end      
     action :install

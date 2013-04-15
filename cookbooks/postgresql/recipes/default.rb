@@ -10,7 +10,7 @@
 
 
 case node.platform
-when "redhat", "centos", "fedora", "oracle"
+when "redhat", "centos", "fedora", "oracle","amazon"
   include_recipe "postgresql::redhat"
 when "debian", "ubuntu"
   include_recipe "postgresql::debian"

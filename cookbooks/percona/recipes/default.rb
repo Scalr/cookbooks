@@ -48,7 +48,7 @@ when "ubuntu","debian"
           mode "0644"
 	end
 
-when "redhat","centos","oracle"
+when "redhat","centos","oracle","amazon"
 
 	package "mysql" do
 	  action :purge

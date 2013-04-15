@@ -19,7 +19,7 @@
 
 package "apache2" do
   case node[:platform]
-  when "centos","redhat","oracle","fedora","suse"
+  when "centos","redhat","oracle","fedora","suse","amazon"
     package_name "httpd"
   when "debian","ubuntu"
     package_name "apache2"
@@ -29,7 +29,7 @@ end
 
 service "apache2" do
 	case node[:platform]
-	when "redhat","centos","oracle","scientific","fedora","suse"
+	when "redhat","centos","oracle","scientific","fedora","suse","amazon"
 		service_name "httpd"
 	when "debian","ubuntu"
 		service_name "apache2"
