@@ -2,38 +2,32 @@ include_recipe "epel"
   
 case node[:platform]
 when "ubuntu","debian"
-	remote_file "/tmp/scalr-repository_0.2_all.deb" do
-		source "http://apt.scalr.net/scalr-repository_0.2_all.deb"
-		mode "0644"
-	end
-	
-	package "scalr" do
-		action :install
-		source "/tmp/scalr-repository_0.2_all.deb"
-		provider Chef::Provider::Package::Dpkg
-	end
-	
+
+	execute "apt-add-repository -y ppa:chris-lea/redis-server"
 	execute "apt-get update" 
-	execute "apt-get -t 'scalr' install redis-server"
+	package "redis-server"
+	
 	service "redis-server" do
 		action [ :disable, :stop ]
 	end
 
 when "redhat","centos","oracle","amazon"
-  
-	if node[:platform_version].to_f < 6.0
-		remote_file "/tmp/scalr-release-2-1.noarch.rpm" do
-			source "http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm"
-			mode "0644"
-		end
-		package "scalr" do
-			action :install
-			source "/tmp/scalr-release-2-1.noarch.rpm"
-			provider Chef::Provider::Package::Rpm
-		end
+	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
+  	
+  	if node[:platform_version].to_f >= 6.0 or node[:platform] == "amazon"
+		execute "rpm -Uvh --replacepkgs http://centos.alt.ru/repository/centos/6/#{arch}/centalt-release-6-1.noarch.rpm"
+	else
+		execute "rpm -Uvh --replacepkgs http://centos.alt.ru/repository/centos/5/#{arch}/centalt-release-5-3.noarch.rpm"
 	end
+
 	package "redis"
 	service "redis" do
 		action [ :disable, :stop ]
 	end
+
+	cookbook_file "/etc/redis.conf" do
+		owner "redis"
+		group "redis"
+	end
+
 end
