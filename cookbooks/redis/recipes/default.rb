@@ -20,7 +20,10 @@ when "redhat","centos","oracle","amazon"
 		execute "rpm -Uvh --replacepkgs http://centos.alt.ru/repository/centos/5/#{arch}/centalt-release-5-3.noarch.rpm"
 	end
 
-	package "redis"
+	yum_package "redis" do
+		flush_cache [:before]
+	end
+	
 	service "redis" do
 		action [ :disable, :stop ]
 	end
