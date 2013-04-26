@@ -2,7 +2,7 @@ include_recipe "epel"
   
 case node[:platform]
 when "ubuntu","debian"
-
+	package "python-software-properties"
 	execute "apt-add-repository -y ppa:chris-lea/redis-server"
 	execute "apt-get update" 
 	package "redis-server"
