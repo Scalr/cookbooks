@@ -9,7 +9,7 @@
 include_recipe "epel"
 
 case node[:platform]
-when "debian","ubuntu"
+when "debian","ubuntu","gcel"
 	execute "cd /tmp && wget http://apt.scalr.net/scalr-repository_0.3_all.deb && dpkg -i /tmp/scalr-repository_0.3_all.deb && rm -f /tmp/scalr-repository_0.3_all.deb"
 	execute "apt-get update"
 when "redhat","centos","oracle","amazon"
@@ -23,6 +23,22 @@ when "redhat","centos","oracle","amazon"
   end
 end
 
+
+if node[:scalarizr][:branch] == 'stable'
+	case node[:platform]
+	when "debian","ubuntu","gcel"
+		execute "sed -i 's/^/#/' /etc/apt/sources.list.d/scalr-latest.list"
+		execute "sed -i 's/^#\+//' /etc/apt/sources.list.d/scalr-stable.list"
+		execute "apt-get update"
+	when "redhat","centos","fedora","oracle","amazon"
+		execute "sed -i 's/^/#/' /etc/yum.repos.d/scalr-latest.repo"
+		execute "sed -i 's/^#\+//' /etc/yum.repos.d/scalr-stable.repo"
+		execute "yum clean all"
+	end
+	node[:scalarizr][:branch] = ""	
+end
+
+
 package "scalarizr-#{node[:scalarizr][:platform]}" do
   case node[:platform]
   when "redhat","centos","oracle","amazon"
@@ -30,7 +46,8 @@ package "scalarizr-#{node[:scalarizr][:platform]}" do
   end
 end 
 
-if !node[:scalarizr][:branch].empty?
+
+if !node[:scalarizr][:branch].empty? 
 	package "scalarizr" do
 		action :purge
 	end
@@ -44,7 +61,7 @@ if !node[:scalarizr][:branch].empty?
 	node[:scalarizr][:branch].gsub!('.', '')
 	
 	case node[:platform]
-	when "debian","ubuntu"
+	when "debian","ubuntu","gcel"
 		execute "echo 'deb http://buildbot.scalr-labs.com/apt/debian #{node[:scalarizr][:branch]}/' > /etc/apt/sources.list.d/scalr-latest.list"
 		execute "apt-get update"
 		package "scalarizr-#{node[:scalarizr][:platform]}"
@@ -71,7 +88,7 @@ end
 
 if node[:scalarizr][:behaviour].include?("app")
   case node[:platform]
-  when "debian","ubuntu"
+  when "debian","ubuntu","gcel"
     execute "cp /usr/share/scalr/apache/html/* /var/www/"
   when "redhat","centos","oracle","amazon"
     execute "cp /usr/share/scalr/apache/html/* /var/www/html/"
