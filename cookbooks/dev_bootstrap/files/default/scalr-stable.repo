@@ -4,8 +4,8 @@ baseurl=http://buildbot.scalr-labs.com/rpm/scalr/rhel/$releasever/$basearch
 enabled=1
 gpgcheck=0
 
-[scalr-trunk]
-name=scalr-trunk
+[scalr-master]
+name=scalr-master
 baseurl=http://buildbot.scalr-labs.com/rpm/master/rhel/$releasever/$basearch
 enabled=1
 gpgcheck=0
