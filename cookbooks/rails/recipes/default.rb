@@ -11,6 +11,7 @@ include_recipe "apache2"
 
 case node[:platform]
 when "debian","ubuntu"
+	package "python-software-properties"
 	execute "apt-add-repository ppa:brightbox/passenger"
 	execute "apt-get update"
 	package "libapache2-mod-passenger"

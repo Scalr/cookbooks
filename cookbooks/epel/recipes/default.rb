@@ -15,10 +15,12 @@ when "redhat","centos","oracle","scientific","amazon"
 		only_if "rpm -q epel-release"
 	end
 
-	epel_rpm = "http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm"
+	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
+
+	epel_rpm = "http://download.fedoraproject.org/pub/epel/6/#{arch}/epel-release-6-8.noarch.rpm"
 
 	if node[:platform_version].to_f < 6.0
-		epel_rpm = "http://dl.fedoraproject.org/pub/epel/5/i386/epel-release-5-4.noarch.rpm"
+		epel_rpm = "http://dl.fedoraproject.org/pub/epel/5/#{arch}/epel-release-5-4.noarch.rpm"
 	end
 
   

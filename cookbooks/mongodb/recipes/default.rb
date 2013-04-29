@@ -11,7 +11,7 @@ when "ubuntu", "debian"
 		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
 	
-	package "mongodb20-10gen"	
+	package "mongodb-10gen"	
 	
 	service "mongodb" do
 		action [ :disable, :stop ]
@@ -29,7 +29,7 @@ when "redhat","centos","oracle","amazon"
 		mode "0644"
 	end
 	
-	yum_package "mongo20-10gen-server" do
+	yum_package "mongo-10gen-server" do
 		flush_cache [:before]
 	end
 	
