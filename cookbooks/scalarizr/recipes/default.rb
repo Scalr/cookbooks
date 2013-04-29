@@ -28,11 +28,11 @@ if node[:scalarizr][:branch] == 'stable'
 	case node[:platform]
 	when "debian","ubuntu","gcel"
 		execute "sed -i 's/^/#/' /etc/apt/sources.list.d/scalr-latest.list"
-		execute "sed -i 's/^#\+//' /etc/apt/sources.list.d/scalr-stable.list"
+		execute "sed -i 's/^#\\+//' /etc/apt/sources.list.d/scalr-stable.list"
 		execute "apt-get update"
 	when "redhat","centos","fedora","oracle","amazon"
 		execute "sed -i 's/^/#/' /etc/yum.repos.d/scalr-latest.repo"
-		execute "sed -i 's/^#\+//' /etc/yum.repos.d/scalr-stable.repo"
+		execute "sed -i 's/^#\\+//' /etc/yum.repos.d/scalr-stable.repo"
 		execute "yum clean all"
 	end
 	node.set[:scalarizr][:branch] = ""	
