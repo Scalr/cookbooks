@@ -35,7 +35,7 @@ if node[:scalarizr][:branch] == 'stable'
 		execute "sed -i 's/^#\+//' /etc/yum.repos.d/scalr-stable.repo"
 		execute "yum clean all"
 	end
-	node[:scalarizr][:branch] = ""	
+	node.set[:scalarizr][:branch] = ""	
 end
 
 
