@@ -4,7 +4,10 @@ case node[:platform]
 when "ubuntu","debian"
 	cookbook_file "/etc/apt/sources.list.d/chris-lea-redis-server-precise.list"
 	execute "apt-get update" 
-	package "redis-server"
+	package "redis-server" do
+		action :install
+		options "--force-yes"
+	end
 	
 	service "redis-server" do
 		action [ :disable, :stop ]
