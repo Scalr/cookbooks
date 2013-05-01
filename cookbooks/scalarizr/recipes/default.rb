@@ -52,7 +52,7 @@ if node[:scalarizr][:platform] == 'gce'
   		package "python-devel"
   		package "openssl-devel"
   		package "python-setuptools"
-  		execute "easy-install --upgrade pyopenssl"
+  		execute "/usr/bin/easy-install --upgrade pyopenssl"
   	end
 
 end
