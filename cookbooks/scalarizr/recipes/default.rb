@@ -46,6 +46,13 @@ package "scalarizr-#{node[:scalarizr][:platform]}" do
   end
 end 
 
+if node[:scalarizr][:platform] == 'gce'
+	case node[:platform]
+  	when "redhat","centos","oracle"
+  		package "pyOpenSSL"
+  	end
+
+end
 
 if !node[:scalarizr][:branch].empty? 
 	package "scalarizr" do
