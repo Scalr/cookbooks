@@ -49,7 +49,10 @@ end
 if node[:scalarizr][:platform] == 'gce'
 	case node[:platform]
   	when "redhat","centos","oracle"
-  		package "pyOpenSSL"
+  		package "python-devel"
+  		package "openssl-devel"
+  		package "python-setuptools"
+  		execute "easy-install --upgrade pyopenssl"
   	end
 
 end
