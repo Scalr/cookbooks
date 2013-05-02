@@ -27,8 +27,7 @@ when "ubuntu","debian","gcel"
 	template "/etc/apt/sources.list.d/percona.list" do
   		source "percona.list.erb"
   		mode "0644"
-  		case node[:platform]
-  		when "gcel"
+  		if node[:platform] == "gcel" or node[:lsb][:codename].start_with?("gcel")
   			variables( :codename => "precise")
   		else
   			variables( :codename => node[:lsb][:codename])
