@@ -46,16 +46,20 @@ package "scalarizr-#{node[:scalarizr][:platform]}" do
   end
 end 
 
+
 if node[:scalarizr][:platform] == 'gce'
 	case node[:platform]
   	when "redhat","centos","oracle"
   		package "python-devel"
   		package "openssl-devel"
-  		package "python-setuptools"
-  		execute "/usr/bin/easy_install --upgrade pyopenssl"
+  	when "gcel","ubuntu","debian"
+  		package "python-dev"
+  		package "libssl-dev"
   	end
-
+	package "python-setuptools"
+	execute "/usr/bin/easy_install --upgrade pyopenssl"
 end
+
 
 if !node[:scalarizr][:branch].empty? 
 	package "scalarizr" do
