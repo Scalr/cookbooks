@@ -35,8 +35,10 @@ when "ubuntu","debian","gcel"
 
 		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
-	
-	if node[:lsb][:release].to_f >= 12.04
+
+	if node[:platform] == "debian"
+		version = '5.5'
+	elsif node[:lsb][:release].to_f >= 12.04
 		version = '5.5'
 	else
 		version = '5.1'

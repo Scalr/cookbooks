@@ -19,7 +19,7 @@ when "debian"
 	if 6.0 <= version and version < 7.0
 		cookbook_file "/etc/apt/sources.list.d/squeeze-backports.list"
 		execute "apt-get update" 
-		package "redis-server"
+		execute "apt-get install -y -t squeeze-backports redis-server" 
 	elsif version >= 7 
 		package "redis-server"
 	end
