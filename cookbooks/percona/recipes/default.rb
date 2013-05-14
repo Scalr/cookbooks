@@ -5,7 +5,7 @@ package "mysql-server" do
 end
 
 case node[:platform]
-when "ubuntu","debian"
+when "ubuntu","debian","gcel"
 	package "mysql-client" do
 	  action :purge
 	end
@@ -24,13 +24,21 @@ when "ubuntu","debian"
 	  action :nothing
 	end
 
-	cookbook_file "/etc/apt/sources.list.d/percona.list" do
-	  source "percona.list"
-          mode "0644"
-	  notifies :run, resources("execute[apt-get update]"), :immediately
+	template "/etc/apt/sources.list.d/percona.list" do
+  		source "percona.list.erb"
+  		mode "0644"
+  		if node[:platform] == "gcel" or node[:lsb][:codename].start_with?("gcel")
+  			variables( :codename => "precise")
+  		else
+  			variables( :codename => node[:lsb][:codename])
+  		end
+
+		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
-	
-	if node[:lsb][:release].to_f >= 12.04
+
+	if node[:platform] == "debian"
+		version = '5.5'
+	elsif node[:lsb][:release].to_f >= 12.04
 		version = '5.5'
 	else
 		version = '5.1'

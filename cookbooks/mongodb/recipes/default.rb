@@ -1,5 +1,5 @@
 case node[:platform]
-when "ubuntu", "debian"
+when "ubuntu", "debian","gcel"
 	execute "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
 	
 	execute "apt-get update" do
@@ -8,6 +8,9 @@ when "ubuntu", "debian"
 	
 	cookbook_file "/etc/apt/sources.list.d/10gen.list" do
 		mode "0644"
+		if node[:platform] == 'debian'
+			source "10gen-debian.list"
+		end
 		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
 	

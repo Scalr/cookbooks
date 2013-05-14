@@ -1,14 +1,33 @@
 include_recipe "epel"
   
 case node[:platform]
-when "ubuntu","debian"
+when "ubuntu"
 	cookbook_file "/etc/apt/sources.list.d/chris-lea-redis-server-precise.list"
 	execute "apt-get update" 
-	package "redis-server"
+	package "redis-server" do
+		action :install
+		options "--force-yes"
+	end
 	
 	service "redis-server" do
 		action [ :disable, :stop ]
 	end
+
+when "debian"
+	version = node[:platform_version].to_f
+
+	if 6.0 <= version and version < 7.0
+		cookbook_file "/etc/apt/sources.list.d/squeeze-backports.list"
+		execute "apt-get update" 
+		execute "apt-get install -y -t squeeze-backports redis-server" 
+	elsif version >= 7 
+		package "redis-server"
+	end
+
+	service "redis-server" do
+		action [ :disable, :stop ]
+	end
+		
 
 when "redhat","centos","oracle","amazon"
 	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"

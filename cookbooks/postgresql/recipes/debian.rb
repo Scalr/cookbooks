@@ -2,7 +2,7 @@ execute "apt-get update" do
   action :nothing
 end
 
-if node[:lsb][:release].to_f < 11.10
+if node[:platform] == "ubuntu" and node[:lsb][:release].to_f < 11.10
 	cookbook_file "/etc/apt/sources.list.d/pitti-postgresql-precise.list"
 	execute "apt-get update"
 end
