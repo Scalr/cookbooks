@@ -20,7 +20,7 @@ template "#{nginx_conf_dir}/scalarizr_gate.conf" do
   owner "root"
   group "root"
   variables({
-    :scalarizr_ports => ["8008", "8010", "8013"],
+    :scalarizr_ports => ["8009", "8011", "8014"],
     :scalr_whitelist => node['scalarizr_proxy']['whitelist']
   })
 end
