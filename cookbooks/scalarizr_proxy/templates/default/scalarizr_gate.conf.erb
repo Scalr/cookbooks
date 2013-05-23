@@ -1,13 +1,11 @@
 # /etc/nginx/conf.d/scalarizr_gate.conf
 #
-# Config for proxy server that redirects requests to given server 
-# in 'reciever-addr' header
+# Config for proxy server that redirects requests to server with ip given
+# in 'x-receiver-host' header and port given in 'x-receiver-port'
 #
 
 server {
-    <% @scalarizr_ports.each do |port| -%>
-    listen <%= port %>;
-    <% end -%>
+    listen 80;
 
     server_name scalarizr_gate;
 
@@ -25,7 +23,7 @@ server {
         <% end -%>
         deny all;
         
-        proxy_pass  http://$http_x_receiver_addr:$server_port;
+        proxy_pass  http://$http_x_receiver_host:$http_x_receiver_port;
         proxy_redirect off;
         proxy_buffering off;
         proxy_set_header        Host            $host;
