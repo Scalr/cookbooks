@@ -17,60 +17,40 @@
 # limitations under the License.
 #
 
-include_recipe "java"
+version = node[:platform_version].to_f
 
 case node.platform
-when "centos","redhat","fedora","oracle"
-  include_recipe "jpackage"
+#when "centos","redhat","fedora","oracle","amazon"
+#  include_recipe "jpackage"
+#end
+when "ubuntu"
+  if version >= 12.04
+    tomcat = "tomcat7"
+
+  else
+    tomcat = "tomcat6"
+  end
+  tomcat_pkgs = [tomcat, "#{tomcat}-admin"]
+
+when "debian"
+  if version >= 7
+    tomcat = "tomcat7"
+  else
+    tomcat = "tomcat6"
+  end
+  tomcat_pkgs = [tomcat, "#{tomcat}-admin"]
+
+when "centos","redhat","fedora","oracle","amazon"
+  tomcat = "tomcat6"
+  tomcat_pkgs = [tomcat, "#{tomcat}-admin-webapps"]
 end
 
-tomcat_pkgs = value_for_platform(
-  ["debian","ubuntu"] => {
-    "default" => ["tomcat6","tomcat6-admin"]
-  },
-  ["centos","redhat","fedora","oracle"] => {
-    "default" => ["tomcat6","tomcat6-admin-webapps"]
-  },
-  "default" => ["tomcat6"]
-)
+
 tomcat_pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
+  package pkg
 end
 
-service "tomcat" do
-  service_name "tomcat6"
-  case node["platform"]
-  when "centos","redhat","fedora","oracle"
-    supports :restart => true, :status => true
-  when "debian","ubuntu"
-    supports :restart => true, :reload => true, :status => true
-  end
-  action [:enable, :start]
-end
 
-case node["platform"]
-when "centos","redhat","fedora","oracle"
-  template "/etc/sysconfig/tomcat6" do
-    source "sysconfig_tomcat6.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-  end
-else  
-  template "/etc/default/tomcat6" do
-    source "default_tomcat6.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-  end
-end
-
-template "/etc/tomcat6/server.xml" do
-  source "server.xml.erb"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :restart, resources(:service => "tomcat")
+service tomcat do
+  action [ :disable, :stop ]
 end
