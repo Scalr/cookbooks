@@ -22,7 +22,10 @@ when "debian", "ubuntu"
   package "libapache2-mod-php5"
   package "php5-cli"
   package "php5-suhosin"
-  package "libapache2-mod-php5"
+    action :install
+    ignore_failure true
+  end
+ 
 
 when "centos", "redhat", "oracle", "amazon"
   package "php" do
