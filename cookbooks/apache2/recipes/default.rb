@@ -22,6 +22,9 @@ package "apache2" do
   when "centos","redhat","oracle","fedora","suse","amazon"
     package_name "httpd"
   when "debian","ubuntu"
+  	if node[:platform] == 'debian' and node[:platform_version].to_f < 7
+  		execute "wget http://ftp.us.debian.org/debian/pool/main/s/ssl-cert/ssl-cert_1.0.32_all.deb && dpkg -i ssl-cert_1.0.32_all.deb"
+  	end
     package_name "apache2"
   end
   action :install
