@@ -21,7 +21,7 @@ case node[:platform]
 when "debian", "ubuntu"
   package "libapache2-mod-php5"
   package "php5-cli"
-  package "php5-suhosin"
+  package "php5-suhosin" do
     action :install
     ignore_failure true
   end
