@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-if node[:platform] == 'debian' and node[:platform_version].to_f < 7 do
+if node[:platform] == 'debian' and node[:platform_version].to_f < 7 then
   execute "wget http://ftp.us.debian.org/debian/pool/main/s/ssl-cert/ssl-cert_1.0.32_all.deb && dpkg -i ssl-cert_1.0.32_all.deb"
 end
 
