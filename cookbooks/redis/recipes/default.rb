@@ -41,6 +41,10 @@ when "redhat","centos","oracle","amazon"
 	yum_package "redis" do
 		flush_cache [:before]
 	end
+
+	package "centalt-release" do
+		action :purge
+	end
 	
 	service "redis" do
 		action [ :disable, :stop ]
@@ -50,5 +54,6 @@ when "redhat","centos","oracle","amazon"
 		owner "redis"
 		group "redis"
 	end
+
 
 end
