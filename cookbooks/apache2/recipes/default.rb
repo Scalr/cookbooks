@@ -41,6 +41,15 @@ service "apache2" do
 	action [ :disable, :stop ]
 end
 
+if node[:scalarizr][:platform] == 'gce' then
+  directory "/var/run/httpd" do
+    owner "root"
+    group "root"
+    mode 0777
+    action :create
+  end
+end
+
 include_recipe "apache2::mod_ssl"
 include_recipe "apache2::mod_rpaf"
 include_recipe "apache2::mod_php5"
