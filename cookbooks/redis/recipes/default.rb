@@ -2,8 +2,14 @@ include_recipe "epel"
   
 case node[:platform]
 when "ubuntu"
-	cookbook_file "/etc/apt/sources.list.d/chris-lea-redis-server-precise.list"
-	execute "apt-get update" 
+
+	template "/etc/apt/sources.list.d/chris-lea-redis-server.list" do
+  		source "chris-lea-redis-server.list.erb"
+  		mode "0644"
+		variables(:codename => node[:lsb][:codename])
+  		notifies :run, resources("execute[apt-get update]"), :immediately
+	end
+
 	package "redis-server" do
 		action :install
 		options "--force-yes"
