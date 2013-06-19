@@ -2,6 +2,10 @@ include_recipe "epel"
   
 case node[:platform]
 when "ubuntu"
+	
+	execute "apt-get update" do
+	  action :nothing
+	end
 
 	template "/etc/apt/sources.list.d/chris-lea-redis-server.list" do
   		source "chris-lea-redis-server.list.erb"
