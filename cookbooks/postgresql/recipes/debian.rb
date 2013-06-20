@@ -27,4 +27,4 @@ service "postgresql" do
   action [:disable, :stop]
 end
 
-execute "sed -i \"s/.*listen_addresses.*/listen_addresses = '*'/g\" /etc/postgresql/9.1/main/postgresql.conf"
+execute "sed -i \"s/.*listen_addresses.*/listen_addresses = '*'/g\" /etc/postgresql/#{version}/main/postgresql.conf"
