@@ -21,4 +21,24 @@ when "ubuntu","debian"
 	end
 	
 	package "rabbitmq-server"
+
+when "centos","rhel"
+	raise if node[:platform_version].to_f < 6
+
+	include_recipe "epel"
+	package "erlang"
+	execute "rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
+	remote_file "/tmp/rabbitmq-server-3.1.3-1.noarch.rpm" do
+		source "http://www.rabbitmq.com/releases/rabbitmq-server/v3.1.3/rabbitmq-server-3.1.3-1.noarch.rpm"
+	end
+
+	package "rabbitmq" do
+		action :install
+		source "/tmp/rabbitmq-server-3.1.3-1.noarch.rpm"
+		provider Chef::Provider::Package::Rpm
+	end
+
+	service "rabbitmq-server" do
+		action [ :disable, :stop ]
+	end
 end
