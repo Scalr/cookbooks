@@ -24,6 +24,7 @@ when "ubuntu","debian"
   package "apparmor" do
     action :purge
   end
+  execute "apt-get update"
 end
 
 package "mysql-server" do
