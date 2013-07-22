@@ -21,6 +21,7 @@ case node[:platform]
 when "debian", "ubuntu"
   package "libapache2-mod-php5"
   package "php5-cli"
+  package "php5-mysql"
   package "php5-suhosin" do
     action :install
     ignore_failure true
@@ -28,10 +29,12 @@ when "debian", "ubuntu"
  
 
 when "centos", "redhat", "oracle", "amazon"
-  package "php" do
-    if node[:platform] == "centos" and node[:platform_version].to_f < 6.0
-      package_name "php53"
-    end      
-    action :install
+  if node[:platform] == "centos" and node[:platform_version].to_f < 6.0
+    php = "php53"
+  else
+    php = "php"
   end
+
+  package "#{php}"
+  package "#{php}-mysql"
 end
