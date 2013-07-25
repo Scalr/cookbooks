@@ -4,7 +4,7 @@ package_release = ["redhat", "oracle", "amazon"].include?(node[:platform]) ? 5 :
 package_os = node[:platform] == "centos" ? "centos" : "redhat"
     
 remote_file "/tmp/pgdg-9.rpm" do
-	source "http://yum.pgrpms.org/9.1/redhat/rhel-#{platform_version}-#{arch}/pgdg-#{package_os}91-9.1-#{package_release}.noarch.rpm"
+	source "http://yum.pgrpms.org/9.1/redhat/rhel-#{platform_version}-#{arch}/pgdg-#{package_os}92-9.2-#{package_release}.noarch.rpm"
 end
 
 rpm_package "/tmp/pgdg-9.rpm"
@@ -40,15 +40,15 @@ end
 =end
 
 
-package "postgresql91"
-package "postgresql91-server"
-package "postgresql91-devel"
+package "postgresql92"
+package "postgresql92-server"
+package "postgresql92-devel"
 
 
-execute "service postgresql-9.1 initdb"
+execute "service postgresql-9.2 initdb"
 
-service "postgresql-9.1" do
+service "postgresql-9.2" do
   action [:disable, :stop]
 end
 
-execute "sed -i \"s/.*listen_addresses.*/listen_addresses = '*'/g\" /var/lib/pgsql/9.1/data/postgresql.conf"
+execute "sed -i \"s/.*listen_addresses.*/listen_addresses = '*'/g\" /var/lib/pgsql/9.2/data/postgresql.conf"
