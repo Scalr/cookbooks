@@ -90,6 +90,7 @@ if !node[:scalarizr][:branch].empty?
 		
 		yum_package "scalarizr-#{node[:scalarizr][:platform]}" do
 			flush_cache [ :before ]
+			options ("--disableplugin=priorities")
 			action :install
 		end
 	end
