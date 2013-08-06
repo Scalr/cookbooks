@@ -42,7 +42,7 @@ end
 package "scalarizr-#{node[:scalarizr][:platform]}" do
   case node[:platform]
   when "redhat","centos","oracle","amazon"
-	 options "-x exim"
+	 options "-x exim --disableplugin=priorities"
   end
 end 
 
