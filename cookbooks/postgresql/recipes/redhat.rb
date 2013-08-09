@@ -4,7 +4,7 @@ package_release = ["redhat", "oracle", "amazon"].include?(node[:platform]) ? 5 :
 package_os = node[:platform] == "centos" ? "centos" : "redhat"
     
 remote_file "/tmp/pgdg-9.rpm" do
-	source "http://yum.pgrpms.org/9.1/redhat/rhel-#{platform_version}-#{arch}/pgdg-#{package_os}92-9.2-#{package_release}.noarch.rpm"
+	source "http://yum.pgrpms.org/9.2/redhat/rhel-#{platform_version}-#{arch}/pgdg-#{package_os}92-9.2-#{package_release}.noarch.rpm"
 end
 
 rpm_package "/tmp/pgdg-9.rpm"
