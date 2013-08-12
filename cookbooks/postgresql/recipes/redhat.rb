@@ -1,6 +1,6 @@
 arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
 platform_version = node[:platform] == "amazon" ? "6.4" : node[:platform_version].to_i 
-package_release = ["redhat", "oracle", "amazon"].include?(node[:platform]) ? 5 : 4
+package_release = ["redhat", "oracle", "amazon"].include?(node[:platform]) ? 7 : 6
 package_os = node[:platform] == "centos" ? "centos" : "redhat"
     
 remote_file "/tmp/pgdg-9.rpm" do
