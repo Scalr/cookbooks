@@ -19,6 +19,7 @@
 #
 
 
+include_recipe "epel"
 package "nginx"
 
 service "nginx" do
