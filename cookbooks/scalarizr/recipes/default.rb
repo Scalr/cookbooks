@@ -12,7 +12,7 @@ case node[:platform]
 when "debian","ubuntu","gcel"
 	execute "cd /tmp && wget http://apt.scalr.net/scalr-repository_0.3_all.deb && dpkg -i /tmp/scalr-repository_0.3_all.deb && rm -f /tmp/scalr-repository_0.3_all.deb"
 	execute "apt-get update"
-when "redhat","centos","oracle","amazon"
+when "redhat","centos","oracle","amazon","scientific"
 
   if node[:platform_version] < "6.0"
 	yum_package "python26"
@@ -30,7 +30,7 @@ if node[:scalarizr][:branch] == 'stable'
 		execute "sed -i 's/^/#/' /etc/apt/sources.list.d/scalr-latest.list"
 		execute "sed -i 's/^#\\+//' /etc/apt/sources.list.d/scalr-stable.list"
 		execute "apt-get update"
-	when "redhat","centos","fedora","oracle","amazon"
+	when "redhat","centos","fedora","oracle","amazon","scientific"
 		execute "sed -i 's/^/#/' /etc/yum.repos.d/scalr-latest.repo"
 		execute "sed -i 's/^#\\+//' /etc/yum.repos.d/scalr-stable.repo"
 		execute "yum clean all"
@@ -41,7 +41,7 @@ end
 
 package "scalarizr-#{node[:scalarizr][:platform]}" do
   case node[:platform]
-  when "redhat","centos","oracle","amazon"
+  when "redhat","centos","oracle","amazon","scientific"
 	 options "-x exim --disableplugin=priorities"
   end
 end 
@@ -49,7 +49,7 @@ end
 
 if node[:scalarizr][:platform] == 'gce'
 	case node[:platform]
-  	when "redhat","centos","oracle"
+  	when "redhat","centos","oracle","scientific"
   		package "python-devel"
   		package "openssl-devel"
   	when "gcel","ubuntu","debian"
@@ -79,7 +79,7 @@ if !node[:scalarizr][:branch].empty?
 		execute "echo 'deb http://buildbot.scalr-labs.com/apt/debian #{node[:scalarizr][:branch]}/' > /etc/apt/sources.list.d/scalr-latest.list"
 		execute "apt-get update"
 		package "scalarizr-#{node[:scalarizr][:platform]}"
-	when "redhat","centos","fedora","oracle","amazon"
+	when "redhat","centos","fedora","oracle","amazon","scientific"
 		baseurl = "baseurl=http:\\/\\/buildbot\\.scalr-labs\\.com\\/rpm\\/#{node[:scalarizr][:branch]}\\/rhel\\/\\$releasever\\/\\$basearch"
 		if node[:platform] == "fedora"
 			baseurl = "baseurl=http:\\/\\/buildbot\\.scalr-labs\\.com\\/rpm\\/#{node[:scalarizr][:branch]}\\/fedora\\/\\$releasever\\/\\$basearch"
@@ -105,7 +105,7 @@ if node[:scalarizr][:behaviour].include?("app")
   case node[:platform]
   when "debian","ubuntu","gcel"
     execute "cp /usr/share/scalr/apache/html/* /var/www/"
-  when "redhat","centos","oracle","amazon"
+  when "redhat","centos","oracle","amazon","scientific"
     execute "cp /usr/share/scalr/apache/html/* /var/www/html/"
   end
 end
