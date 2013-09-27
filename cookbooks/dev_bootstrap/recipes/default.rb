@@ -40,3 +40,6 @@ when "redhat","centos","oracle","amazon"
   yum_package "scalarizr-devtools"
 
 end
+
+package "vim"
+package "ipython"
