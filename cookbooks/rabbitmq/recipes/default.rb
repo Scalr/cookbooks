@@ -29,7 +29,7 @@ when "centos","rhel"
 	package "erlang"
 	execute "rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
 	remote_file "/tmp/rabbitmq-server-3.1.5-1.noarch.rpm" do
-		source "http://www.rabbitmq.com/releases/rabbitmq-server/v3.1.3/rabbitmq-server-3.1.5-1.noarch.rpm"
+		source "http://www.rabbitmq.com/releases/rabbitmq-server/v3.1.5/rabbitmq-server-3.1.5-1.noarch.rpm"
 	end
 
 	package "rabbitmq" do
