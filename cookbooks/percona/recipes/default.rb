@@ -4,6 +4,14 @@ package "mysql-server" do
   action :purge
 end
 
+package "iptables" do
+	action :install
+end
+
+package "git" do
+	action :install
+end
+
 case node[:platform]
 when "ubuntu","debian","gcel"
 	package "mysql-client" do
