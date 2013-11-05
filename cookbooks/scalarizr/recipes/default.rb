@@ -35,7 +35,10 @@ if node[:scalarizr][:branch] == 'stable'
 		execute "sed -i 's/^#\\+//' /etc/yum.repos.d/scalr-stable.repo"
 		execute "yum clean all"
 	end
-	node.set[:scalarizr][:branch] = ""	
+	node.set[:scalarizr][:branch] = ""
+elsif node[:scalarizr][:branch].to_s.strip.empty?
+	# Latest
+	latest = true
 end
 
 
@@ -96,11 +99,6 @@ if !node[:scalarizr][:branch].empty?
 	end
 end
 
-if node[:scalarizr][:dev] == "1"
-	execute "cp /etc/scalr/logging-debug.ini /etc/scalr/logging.ini"
-end
-
-
 if node[:scalarizr][:behaviour].include?("app")
   case node[:platform]
   when "debian","ubuntu","gcel"
@@ -112,5 +110,10 @@ end
 
 behaviours=node[:scalarizr][:behaviour].join(",")
 execute "scalarizr -y --configure -o behaviour=" + behaviours + " -o platform=" + node[:scalarizr][:platform]
-execute "scalr-upd-client -r stable"
+
+if defined? latest and latest
+	execute "scalr-upd-client -r latest"
+else
+	execute "scalr-upd-client -r stable"
+end
 
