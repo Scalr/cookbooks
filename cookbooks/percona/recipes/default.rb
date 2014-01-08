@@ -1,5 +1,3 @@
-
-
 package "mysql-server" do
   action :purge
 end
@@ -12,31 +10,12 @@ package "git" do
 	action :install
 end
 
+include_recipe "repo"
+
 case node[:platform]
 when "ubuntu","debian","gcel"
 	package "mysql-client" do
 	  action :purge
-	end
-
-	execute "request percona key" do
-	  command "apt-key adv --keyserver keys.gnupg.net --recv-keys 1C4CBDCDCD2EFD2A"
-	  not_if "apt-key list | grep CD2EFD2A"
-	end
-
-	execute "apt-get update" do
-	  action :nothing
-	end
-
-	template "/etc/apt/sources.list.d/percona.list" do
-  		source "percona.list.erb"
-  		mode "0644"
-  		if node[:platform] == "gcel" or node[:lsb][:codename].start_with?("gcel")
-  			variables( :codename => "precise")
-  		else
-  			variables( :codename => node[:lsb][:codename])
-  		end
-
-		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
 
 	if node[:platform] == "debian"
@@ -67,14 +46,8 @@ when "redhat","centos","oracle","amazon"
 
 	# postfix requires mysql-libs
 	execute "rpm -e --nodeps mysql-libs" do
-    only_if "rpm -q mysql-libs"
+    	only_if "rpm -q mysql-libs"
 	end
-
-	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
-	
-	yum_package "gpg"
-
-	execute "rpm -Uvh --replacepkgs http://www.percona.com/downloads/percona-release/percona-release-0.0-1.#{arch}.rpm"
 	
 	if node[:platform_version].to_f >= 6.0
 		version = '55'
