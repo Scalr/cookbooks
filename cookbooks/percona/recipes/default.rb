@@ -10,7 +10,7 @@ package "git" do
 	action :install
 end
 
-include_recipe "repo"
+include_recipe "percona::repo"
 
 case node[:platform]
 when "ubuntu","debian","gcel"
