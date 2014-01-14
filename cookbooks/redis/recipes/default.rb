@@ -40,20 +40,11 @@ when "debian"
 		
 
 when "redhat","centos","oracle","amazon"
-	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
-  	
-  	if node[:platform_version].to_f >= 6.0 or node[:platform] == "amazon"
-		execute "rpm -Uvh --replacepkgs http://centos.alt.ru/repository/centos/6/#{arch}/centalt-release-6-1.noarch.rpm"
-	else
-		execute "rpm -Uvh --replacepkgs http://centos.alt.ru/repository/centos/5/#{arch}/centalt-release-5-3.noarch.rpm"
-	end
+
+	include_recipe "epel"
 
 	yum_package "redis" do
 		flush_cache [:before]
-	end
-
-	package "centalt-release" do
-		action :purge
 	end
 	
 	service "redis" do
