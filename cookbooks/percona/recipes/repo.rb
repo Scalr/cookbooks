@@ -3,7 +3,7 @@
 case node[:platform]
 when "ubuntu","debian","gcel"
 	execute "request percona key" do
-	  command "apt-key adv --keyserver keys.gnupg.net --recv-keys 1C4CBDCDCD2EFD2A"
+	  command "apt-key adv --keyserver pgp.mit.edu --recv-keys 1C4CBDCDCD2EFD2A"
 	  not_if "apt-key list | grep CD2EFD2A"
 	end
 
