@@ -7,17 +7,6 @@
 # All rights reserved - Do Not Redistribute
 #
 
-
-ruby_block "check if installed" do
-	block do
-		out = `mysqld -V`
-		if out.include? "XtraDB Cluster"
-			return
-		end
-	end
-end
-
-
 package "mysql-server" do
 	action :purge
 end
@@ -27,8 +16,10 @@ include_recipe "percona::repo"
 
 case node[:platform]
 when "ubuntu","debian","gcel"
-	package "mysql-client" do
-		action :purge
+	["mysql-client", "mysql-common"].each do |p|
+		package p do
+			action :purge
+		end
 	end
 	package "percona-xtradb-cluster-server-5.5"
 when "redhat","centos","oracle","amazon"
