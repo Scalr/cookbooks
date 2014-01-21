@@ -6,9 +6,21 @@
 # 
 # All rights reserved - Do Not Redistribute
 #
+
+
+ruby_block "check if installed" do
+	block do
+		out = `mysqld -V`
+		if out.include? "XtraDB Cluster"
+			return
+		end
+	end
+end
+
 package "mysql-server" do
 	action :purge
 end
+
 
 include_recipe "percona::repo"
 

@@ -22,6 +22,7 @@ when "ubuntu","debian","gcel"
 
 		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
+	
 when "redhat","centos","oracle","amazon"
 	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
 	yum_package "gpg"
