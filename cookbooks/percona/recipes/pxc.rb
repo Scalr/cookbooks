@@ -11,7 +11,7 @@
 ruby_block "check if installed" do
 	block do
 		out = `mysqld -V`
-		if out.include? "XtraDB Cluster" do
+		if out.include? "XtraDB Cluster"
 			return
 		end
 	end
