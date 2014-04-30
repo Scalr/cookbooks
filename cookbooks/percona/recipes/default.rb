@@ -10,62 +10,67 @@ package "git" do
 	action :install
 end
 
-include_recipe "percona::repo"
+if node["platform"] == "ubuntu" and node[:lsb][:release].to_f >= 14.04
+    package "percona-xtradb-cluster-server"
+else
+    include_recipe "percona::repo"
 
-case node[:platform]
-when "ubuntu","debian","gcel"
-	package "mysql-client" do
-	  action :purge
-	end
+    case node[:platform]
+    when "ubuntu","debian","gcel"
+        package "mysql-client" do
+          action :purge
+        end
 
-	if node[:platform] == "debian"
-		version = '5.5'
-	elsif node[:lsb][:release].to_f >= 12.04
-		version = '5.5'
-	else
-		version = '5.1'
-	end
+        if node[:platform] == "debian"
+            version = '5.5'
+        elsif node[:lsb][:release].to_f >= 12.04
+            version = '5.5'
+        else
+            version = '5.1'
+        end
 
-	package "percona-server-server-#{version}" do
-	  action :install
-	  options "--no-install-recommends"
-	end
-	
-	package "percona-server-client-#{version}"
-	
-	cookbook_file "/etc/mysql/my.cnf" do
-	  source "my-medium.cnf"
-          mode "0644"
-	end
+        package "percona-server-server-#{version}" do
+            action :install
+            options "--no-install-recommends"
+        end
 
-when "redhat","centos","oracle","amazon"
+        package "percona-server-client-#{version}"
 
-	package "mysql" do
-	  action :purge
-	end
+        cookbook_file "/etc/mysql/my.cnf" do
+            source "my-medium.cnf"
+            mode "0644"
+        end
 
-	# postfix requires mysql-libs
-	execute "rpm -e --nodeps mysql-libs" do
-    	only_if "rpm -q mysql-libs"
-	end
-	
-	if node[:platform_version].to_f >= 6.0
-		version = '55'
-	else
-		version = '51'
-	end
 
-	yum_package "Percona-Server-server-#{version}" do
-			action :install
-			flush_cache [:before]
-	end
+    when "redhat","centos","oracle","amazon"
 
-	yum_package "Percona-Server-client-#{version}"
+        package "mysql" do
+          action :purge
+        end
 
-	cookbook_file "/etc/my.cnf" do
-	  source "my-medium.cnf"
-          mode "0644"
-	end
+        # postfix requires mysql-libs
+        execute "rpm -e --nodeps mysql-libs" do
+            only_if "rpm -q mysql-libs"
+        end
+
+        if node[:platform_version].to_f >= 6.0
+            version = '55'
+        else
+            version = '51'
+        end
+
+        yum_package "Percona-Server-server-#{version}" do
+                action :install
+                flush_cache [:before]
+        end
+
+        yum_package "Percona-Server-client-#{version}"
+
+        cookbook_file "/etc/my.cnf" do
+          source "my-medium.cnf"
+              mode "0644"
+        end
+    end
 end
 
 service "mysql" do
