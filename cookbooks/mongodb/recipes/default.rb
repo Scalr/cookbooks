@@ -2,18 +2,15 @@ case node[:platform]
 when "ubuntu", "debian","gcel"
 	execute "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
 	
-	execute "apt-get update" do
-		action :nothing
-	end
-	
 	cookbook_file "/etc/apt/sources.list.d/10gen.list" do
 		mode "0644"
 		if node[:platform] == 'debian'
 			source "10gen-debian.list"
 		end
-		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
-	
+
+    execute "apt-get update"
+
 	package "mongodb-10gen"	
 	
 	service "mongodb" do
