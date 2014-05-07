@@ -35,4 +35,13 @@ when "redhat","centos","oracle","scientific","amazon"
 		not_if 
 	end
 
+	if node[:platform_version].to_f >= 6.0 or node[:platform] == "amazon"
+		cookbook_file "/etc/yum.repos.d/epel.repo" do
+			source "epel-6.repo"
+		end
+	else
+		cookbook_file "/etc/yum.repos.d/epel.repo" do
+			source "epel-5.repo"
+		end
+	end
 end

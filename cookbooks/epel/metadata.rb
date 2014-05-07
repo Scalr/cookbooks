@@ -1,3 +1,4 @@
+name             "epel"
 maintainer       "Scalr inc."
 maintainer_email "spike@scalr.com"
 license          "All rights reserved"
