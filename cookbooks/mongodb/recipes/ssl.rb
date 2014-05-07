@@ -23,7 +23,7 @@ bash "install_mongodb" do
     timeout 7200
     returns 0
     code <<-EOH
-        sudo scons  --cc=gcc --ssl all
+        sudo scons --ssl --64 all
         sudo scons install
     EOH
 end
