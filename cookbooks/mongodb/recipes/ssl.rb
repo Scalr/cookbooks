@@ -30,8 +30,8 @@ end
 
 # Change service state
 service "mongodb" do
-    service_name "mongodb"
-    stop_command "pgrep -l mongo | awk {print'$1'} | xargs -i{}  sudo kill {}"
+    service_name node[:service][:name]
+    stop_command node[:service][:stop_command]
     action [ :stop, :disable ]
 end
 
