@@ -2,7 +2,7 @@ case node[:platform_family]
 # Debian like os
 when "debian"
     # Install requirements
-	execute "sudo apt-get update && sudo apt-get install git-core build-essential scons libssl-dev -y"
+	execute "sudo apt-get update && sudo apt-get install git-core build-essential scons libssl-dev  libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev -y"
 
 # Red hat like os
 when "rhel"
@@ -23,14 +23,16 @@ bash "install_mongodb" do
     timeout 7200
     returns 0
     code <<-EOH
-        sudo scons --ssl --64 all
+        sudo scons  -Q debug=0 --ssl --64 --release all
         sudo scons install
     EOH
 end
 
 # Change service state
 service "mongodb" do
-    action [ :disable, :stop ]
+    service_name "mongodb"
+    stop_command "pgrep -l mongo | awk {print'$1'} | xargs -i{}  sudo kill {}"
+    action [ :stop, :disable ]
 end
 
 execute "sudo rm -Rf #{node[:repository][:dir]}"
