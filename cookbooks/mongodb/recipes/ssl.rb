@@ -49,7 +49,7 @@ end
 
 #Add group
 group "mongodb" do
-    append "True"
+    append true
     group_name node[:group][:name]
     gid node[:group][:gid]
     members node[:group][:members]
