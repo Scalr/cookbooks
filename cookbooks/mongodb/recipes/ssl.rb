@@ -38,5 +38,23 @@ end
 execute "sudo rm -Rf #{node[:repository][:dir]}"
 
 
+#Add user
+user "mongodb" do
+    username node[:user][:name]
+    gid node[:user][:gid]
+    home node[:user][:home]
+    shell node[:user][:shell]
+    action :create
+end
+
+#Add group
+group "mongodb" do
+    append "True"
+    group_name node[:group][:name]
+    gid node[:group][:gid]
+    members node[:group][:members]
+    action :create
+end
+
 
 
