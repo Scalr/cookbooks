@@ -23,7 +23,6 @@ when "redhat","centos","oracle","amazon","scientific"
   end
 end
 
-
 if node[:scalarizr][:branch] == 'stable'
 	case node[:platform]
 	when "debian","ubuntu","gcel"
@@ -39,50 +38,43 @@ if node[:scalarizr][:branch] == 'stable'
 elsif node[:scalarizr][:branch].to_s.strip.empty?
 	# Latest
 	latest = true
-end
+else
+	node[:scalarizr][:branch].gsub!('/', '-')
+	node[:scalarizr][:branch].gsub!('.', '')
 
+	case node[:platform]
+	when "debian","ubuntu","gcel"
+		execute "echo 'deb http://buildbot.scalr-labs.com/apt/debian #{node[:scalarizr][:branch]}/' > /etc/apt/sources.list.d/scalr-branch.list"
+
+    	bash 'pin_repo' do
+            code <<-EOH
+                echo -e 'Package: *\nPin: release a=#{node[:scalarizr][:branch]}\nPin-Priority: 1001\n' > /etc/apt/preferences
+            EOH
+            not_if "grep -q #{node[:scalarizr][:branch]} /etc/apt/preferences"
+        end
+
+		execute "apt-get update"
+	when "redhat","centos","fedora","oracle","amazon","scientific"
+	    package "yum-plugin-priorities" do
+	        if node[:platform_version].to_f < 6
+	            package_name "yum-priorities"
+	        end
+	    end
+		baseurl = "http://buildbot.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/rhel/$releasever/$basearch"
+		if node[:platform] == "fedora"
+			baseurl = "http://buildbot.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/fedora/$releasever/$basearch"
+		end
+		execute "echo -e '[scalr-#{node[:scalarizr][:branch]}]\nname=scalr branch\n' > /etc/yum.repos.d/scalr-branch.repo"
+		execute "echo -e 'baseurl=#{baseurl}\nenabled=1\ngpgcheck=0\npriority=10' >> /etc/yum.repos.d/scalr-branch.repo"
+		execute "yum clean all"
+	end
+end
 
 package "scalarizr-#{node[:scalarizr][:platform]}" do
   case node[:platform]
   when "redhat","centos","oracle","amazon","scientific"
-	 options "-x exim --disableplugin=priorities"
+	 options "-x exim"
   end
-end 
-
-
-if !node[:scalarizr][:branch].empty? 
-	package "scalarizr" do
-		action :purge
-	end
-	package "scalarizr-#{node[:scalarizr][:platform]}" do
-		action :purge
-	end
-	package "scalarizr-base" do
-		action :purge
-	end
-	node[:scalarizr][:branch].gsub!('/', '-')
-	node[:scalarizr][:branch].gsub!('.', '')
-	
-	case node[:platform]
-	when "debian","ubuntu","gcel"
-		execute "echo 'deb http://buildbot.scalr-labs.com/apt/debian #{node[:scalarizr][:branch]}/' > /etc/apt/sources.list.d/scalr-latest.list"
-		execute "apt-get update"
-		package "scalarizr-#{node[:scalarizr][:platform]}"
-	when "redhat","centos","fedora","oracle","amazon","scientific"
-		baseurl = "baseurl=http:\\/\\/buildbot\\.scalr-labs\\.com\\/rpm\\/#{node[:scalarizr][:branch]}\\/rhel\\/\\$releasever\\/\\$basearch"
-		if node[:platform] == "fedora"
-			baseurl = "baseurl=http:\\/\\/buildbot\\.scalr-labs\\.com\\/rpm\\/#{node[:scalarizr][:branch]}\\/fedora\\/\\$releasever\\/\\$basearch"
-		end
-		
-		execute "yum clean all"
-		execute "sed -i 's/baseurl=.*$/#{baseurl}/g' /etc/yum.repos.d/scalr-latest.repo"
-		
-		yum_package "scalarizr-#{node[:scalarizr][:platform]}" do
-			flush_cache [ :before ]
-			options ("--disableplugin=priorities")
-			action :install
-		end
-	end
 end
 
 if node[:scalarizr][:behaviour].include?("app")
