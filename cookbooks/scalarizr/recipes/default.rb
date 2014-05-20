@@ -91,9 +91,6 @@ else
 end
 
 
-  end
-end
-
 if node[:scalarizr][:behaviour].include?("app")
     case node[:platform]
     when "debian","ubuntu","gcel"
