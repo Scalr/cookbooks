@@ -84,6 +84,7 @@ package "scalarizr-#{node[:scalarizr][:platform]}" do
   case node[:platform]
   when "redhat","centos","oracle","amazon","scientific"
      options "-x exim"
+     flush_cache [:before]
   end
 end
 
