@@ -80,11 +80,17 @@ else
     end
 end
 
-package "scalarizr-#{node[:scalarizr][:platform]}" do
-  case node[:platform]
-  when "redhat","centos","oracle","amazon","scientific"
-     options "-x exim"
-     flush_cache [:before]
+case node[:platform]
+when "redhat","centos","oracle","amazon","scientific"
+    yum_package "scalarizr-#{node[:scalarizr][:platform]}" do
+       options "-x exim"
+       flush_cache [:before]
+    end
+else
+    package "scalarizr-#{node[:scalarizr][:platform]}"
+end
+
+
   end
 end
 
