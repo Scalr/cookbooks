@@ -11,9 +11,9 @@ when "ubuntu", "debian","gcel"
 
     execute "apt-get update"
 
-	package "mongodb-10gen"	
+	package "mongodb-org"
 	
-	service "mongodb" do
+	service "mongod" do
 		action [ :disable, :stop ]
 	end
 	
@@ -29,7 +29,7 @@ when "redhat","centos","oracle","amazon"
 		mode "0644"
 	end
 	
-	yum_package "mongo-10gen-server" do
+	yum_package "mongodb-org" do
 		flush_cache [:before]
 	end
 	

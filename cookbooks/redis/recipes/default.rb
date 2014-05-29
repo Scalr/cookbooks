@@ -30,8 +30,10 @@ when "debian"
 		cookbook_file "/etc/apt/sources.list.d/squeeze-backports.list"
 		execute "apt-get update" 
 		execute "apt-get install -y -t squeeze-backports redis-server" 
-	elsif version >= 7 
-		package "redis-server"
+	elsif version >= 7
+        cookbook_file "/etc/apt/sources.list.d/wheezy-backports.list"
+        execute "apt-get update"
+		execute "apt-get install -y -t wheezy-backports redis-server"
 	end
 
 	service "redis-server" do
