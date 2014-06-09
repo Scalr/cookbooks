@@ -26,7 +26,6 @@ case node.platform
 when "ubuntu"
   if version >= 12.04
     tomcat = "tomcat7"
-
   else
     tomcat = "tomcat6"
   end
@@ -41,7 +40,8 @@ when "debian"
   tomcat_pkgs = [tomcat, "#{tomcat}-admin"]
 
 when "centos","redhat","fedora","oracle","amazon"
-  tomcat = "tomcat6"
+  include_recipe "epel"
+  tomcat = "tomcat"
   tomcat_pkgs = [tomcat, "#{tomcat}-admin-webapps"]
 end
 
