@@ -12,7 +12,7 @@ end
 
 # Get source
 git node[:repository][:dir] do
-    repository node[:repository][:name]
+    repository "git://github.com/mongodb/mongo.git"
     checkout_branch node[:repository][:revision]
     action :checkout
 end
@@ -30,28 +30,27 @@ end
 
 # Change service state
 service "mongodb" do
-    service_name node[:service][:name]
-    stop_command node[:service][:stop_command]
+    service_name "mongodb"
+    stop_command "pgrep -l mongo | awk {print'$1'} | xargs -i{}  sudo kill {}"
     action [ :stop, :disable ]
 end
 
 execute "sudo rm -Rf #{node[:repository][:dir]}"
 
-
 #Add user
 user "mongodb" do
-    username node[:user][:name]
-    gid node[:user][:gid]
-    home node[:user][:home]
-    shell node[:user][:shell]
+    username "mongodb"
+    gid "nogroup"
+    home "/home/mongodb"
+    shell "/bin/false"
     action :create
 end
 
 #Add group
 group "mongodb" do
     append true
-    group_name node[:group][:name]
-    members node[:group][:members]
+    group_name "mongodb"
+    members "mongodb"
     action :create
 end
 
