@@ -13,7 +13,7 @@ end
 # Get source
 git node[:repository][:dir] do
     repository "git://github.com/mongodb/mongo.git"
-    checkout_branch node[:repository][:revision]
+    revision node[:repository][:revision]
     action :checkout
 end
 
