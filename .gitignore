@@ -1,4 +1,7 @@
 .rake_test_cache
 .chef
 *.pem
+Gemfile.lock
+.kitchen
+Berksfile.lock
 

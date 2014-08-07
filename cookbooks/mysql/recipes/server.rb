@@ -27,9 +27,7 @@ when "ubuntu","debian"
   execute "apt-get update"
 end
 
-package "mysql-server" do
-  action :install
-end
+package node['mysql']['package_server_name']
 
 service "mysql" do
 	action [ :disable, :stop ]
