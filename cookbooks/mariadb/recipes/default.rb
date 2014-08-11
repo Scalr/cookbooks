@@ -1,29 +1,14 @@
-
-
 package "mysql-server" do
   action :purge
 end
 
-case node[:platform]
-when "ubuntu", "debian"
+
+case node["platform_family"]
+when 'debian'
+    include_recipe 'mariadb::apt_mariadb'
+
 	package "mysql-client" do
 	  action :purge
-	end
-
-	execute "request mariadb key" do
-	  command "apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db"
-	  not_if "apt-key list | grep 1BB943DB"
-	end
-	
-	execute "apt-get update" do
-	  action :nothing
-	end
-
-	template "/etc/apt/sources.list.d/mariadb.list" do
-  		source "mariadb.list.erb"
-  		mode "0644"
-  		variables( :codename => node[:lsb][:codename])
-		notifies :run, resources("execute[apt-get update]"), :immediately
 	end
 
 	package "mariadb-server" do
@@ -33,38 +18,20 @@ when "ubuntu", "debian"
 
 	package "mariadb-client"
 
-
-when "redhat", "centos", "oracle", "amazon"
+when 'rhel'
+    include_recipe 'mariadb::yum_mariadb'
 
 	package "mysql" do
-	  action :purge
+	  action :remove
 	end
 
 	# postfix requires mysql-libs
 	execute "rpm -e --nodeps mysql-libs" do
-    only_if "rpm -q mysql-libs"
-	end
-	
-	yum_package "gpg"
-
-	arch = node[:kernel][:machine]  =~ /x86_64/ ? "amd64" : "x86"
-	platform = node[:platform] == "redhat" ? "rhel" : "centos"
-
-	template "/etc/yum.repos.d/mariadb.repo" do
-		source "mariadb.repo.erb"
-		mode = "0644"
-		variables(
-			:arch => arch,
-			:platform => platform
-		)
+        only_if "rpm -q mysql-libs"
 	end
 
-	yum_package "MariaDB-server" do
-		action :install
-		flush_cache [:before]
-	end
-
-	yum_package "MariaDB-client"
+	package "MariaDB-server"
+	package "MariaDB-client"
 
 	#cookbook_file "/etc/my.cnf" do
 	#  source "my-medium.cnf"
