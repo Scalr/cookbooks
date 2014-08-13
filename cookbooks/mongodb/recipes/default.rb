@@ -1,44 +1,46 @@
-case node[:platform]
-when "ubuntu", "debian","gcel"
-	execute "apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
-	
-	cookbook_file "/etc/apt/sources.list.d/10gen.list" do
-		mode "0644"
-		if node[:platform] == 'debian'
-			source "10gen-debian.list"
-		end
-	end
+case node["platform_family"]
+when "debian"
+    include_recipe 'apt'
+    platform = platform?("ubuntu") ? "ubuntu-upstart" : "debian-sysvinit"
+    apt_repository 'mongodb' do
+        uri "http://downloads-distro.mongodb.org/repo/#{platform}"
+        distribution 'dist'
+        components ['10gen']
+        keyserver 'hkp://keyserver.ubuntu.com:80'
+        key '7F0CEB10'
+        action :add
+    end
 
-    execute "apt-get update"
+    node["mongodb"]["install_packages"].each do |pkg|
+        package pkg do
+            version node["mongodb"]["full_versions"][node["mongodb"]["version"]]
+            action :install
+        end
+    end
 
-	package "mongodb-org"
-	
-	service "mongod" do
-		action [ :disable, :stop ]
-	end
-	
-when "redhat","centos","oracle","amazon"
-	if ['i686', 'i586', 'i386'].include?(node[:kernel][:machine])
-		arch = "x86"
-	else
-		arch = "x64"
-	end
-	
-	cookbook_file "/etc/yum.repos.d/10gen.repo" do
-		source "10gen_#{arch}.repo"
-		mode "0644"
-	end
-	
-	yum_package "mongodb-org" do
-		flush_cache [:before]
-	end
-	
-	service "mongod" do
-		action [ :disable, :stop ]
-	end
+when "rhel"
+    include_recipe 'yum'
+    arch = node[:kernel][:machine] =~ /x86_64/ ? 'x86_64' : 'i686'
+    yum_repository  'mongodb' do
+        description 'Mongodb repo'
+        baseurl     "http://downloads-distro.mongodb.org/repo/redhat/os/#{arch}"
+        action      :create
+        gpgcheck    false
+        enabled     true
+    end
 
+    if node["mongodb"]["version"] && node["mongodb"]["version"].to_f < 2.6
+        pkgs = node["mongodb"]["install_packages"].join(" ")
+        # We have to install it this way because old 'mongo-10gen' packages are
+        # obsoleted by mongodb-org in the repo.
+        execute "yum -y install #{pkgs} --exclude mongodb-org,mongodb-org-server"
+    else
+        node["mongodb"]["install_packages"].each do |pkg|
+            package pkg
+        end
+    end
 end
 
-
-
-
+service node["mongodb"]["service_name"] do
+    action [:disable, :stop]
+end
