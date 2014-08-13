@@ -5,7 +5,16 @@ end
 
 case node["platform_family"]
 when 'debian'
-    include_recipe 'mariadb::apt_mariadb'
+    include_recipe 'apt'
+
+    apt_repository 'mariadb' do
+        uri "http://mirrors.supportex.net/mariadb/repo/#{node[:mariadb][:version]}/#{node[:platform]}"
+        distribution node['lsb']['codename']
+        components ['main']
+        keyserver 'keyserver.ubuntu.com'
+        key '0xcbcb082a1bb943db'
+        action :add
+    end
 
 	package "mysql-client" do
 	  action :purge
@@ -19,7 +28,14 @@ when 'debian'
 	package "mariadb-client"
 
 when 'rhel'
-    include_recipe 'mariadb::yum_mariadb'
+    include_recipe 'yum'
+
+    arch = node[:kernel][:machine] =~ /x86_64/ ? "amd64" : "x86"
+    yum_repository 'mariadb' do
+        description 'Mariadb repo'
+        baseurl     "http://yum.mariadb.org/#{node[:mariadb][:version]}/#{node[:platform]}#{node[:platform_version].to_i}-#{arch}"
+        gpgkey      'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
+    end
 
 	package "mysql" do
 	  action :remove
