@@ -1,4 +1,3 @@
-include_recipe 'locale'
 include_recipe 'postgresql::apt_pgdg_postgresql'
 
 node['postgresql']['packages'].each do |pkg|

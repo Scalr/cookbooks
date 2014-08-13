@@ -9,18 +9,23 @@ platforms:
   - name: ubuntu-10.04
     run_list:
       - recipe[apt]
+      - recipe[locale]
   - name: ubuntu-12.04
     run_list:
       - recipe[apt]
+      - recipe[locale]
   - name: ubuntu-14.04
     run_list:
       - recipe[apt]
+      - recipe[locale]
   - name: debian-6.0.8
     run_list:
       - recipe[apt]
+      - recipe[locale]
   - name: debian-7.4
     run_list:
       - recipe[apt]
+      - recipe[locale]
   - name: centos-5.10
   - name: centos-6.4
 
