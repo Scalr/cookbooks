@@ -1,30 +1,27 @@
 # Installs percona repo
 
-case node[:platform]
-when "ubuntu","debian","gcel"
-	execute "request percona key" do
-	  command "apt-key adv --keyserver pgp.mit.edu --recv-keys 1C4CBDCDCD2EFD2A"
-	  not_if "apt-key list | grep CD2EFD2A"
-	end
-
-	execute "apt-get update" do
-	  action :nothing
-	end
-
-	template "/etc/apt/sources.list.d/percona.list" do
-  		source "percona.list.erb"
-  		mode "0644"
-  		if node[:platform] == "gcel" or node[:lsb][:codename].start_with?("gcel")
-  			variables( :codename => "precise")
-  		else
-  			variables( :codename => node[:lsb][:codename])
-  		end
-
-		notifies :run, resources("execute[apt-get update]"), :immediately
-	end
+case node["platform_family"]
+when "debian"
+    include_recipe "apt"
+    apt_repository "percona" do
+        uri          "http://repo.percona.com/apt"
+        distribution node["lsb"]["codename"]
+        components   ["main"]
+        #keyserver    "keys.gnupg.net"
+        keyserver    "keyserver.ubuntu.com"
+        key          "CD2EFD2A"
+        action       :add
+    end
 	
-when "redhat","centos","oracle","amazon"
+when "rhel"
+    include_recipe "yum"
 	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
-	yum_package "gpg"
-	execute "rpm -Uvh --replacepkgs http://www.percona.com/downloads/percona-release/percona-release-0.0-1.#{arch}.rpm"
+    yum_repository "percona" do
+        description "Percona YUM repo"
+        baseurl     "http://repo.percona.com/centos/$releasever/os/$basearch/"
+        gpgkey      "http://www.percona.com/downloads/RPM-GPG-KEY-percona"
+        gpgcheck    true
+        sslverify   true
+        action      :create 
+    end
 end
