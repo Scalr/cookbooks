@@ -14,7 +14,6 @@ when "debian"
 when "rhel"
     if node["tomcat"]["version"] == '7'
         tomcat = "tomcat"
-        default["tomcat"]["service_name"] = "tomcat"
         default["tomcat"]["from_epel"] = true
     end
     default["tomcat"]["packages"] = [tomcat, "#{tomcat}-admin-webapps"]
