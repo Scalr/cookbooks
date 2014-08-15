@@ -11,3 +11,5 @@ version          "0.10.3"
 end
 
 recipe "tomcat::default", "Installs and configures Tomcat"
+name   "tomcat"
+depends "epel"
