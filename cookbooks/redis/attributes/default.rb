@@ -25,7 +25,7 @@ if node["redis"]["version"]
     default["redis"]["install_packages"] =
         case node["platform_family"]
         when "debian"
-            node["redis"]["packages"].fetch(node["redis"]["version"]).fetch("#{node[:platform]}")
+            node["redis"]["packages"].fetch(node["redis"]["version"]).fetch(node["platform"])
         when "rhel"
             node["redis"]["packages"].fetch(node["redis"]["version"]).fetch("#{node[:platform_family]}#{node[:platform_version].to_i}")
         end
