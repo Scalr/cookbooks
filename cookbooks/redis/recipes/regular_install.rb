@@ -40,7 +40,3 @@ when "redhat","centos","oracle","amazon","scientific"
 		group "redis"
 	end
 end
-
-service node["redis"]["service_name"] do
-    action [:disable, :stop]
-end
