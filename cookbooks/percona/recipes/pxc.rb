@@ -14,15 +14,15 @@ end
 
 include_recipe "percona::repo"
 
-case node[:platform]
-when "ubuntu","debian","gcel"
+case node["platform_family"]
+when "debian"
 	["mysql-client", "mysql-common"].each do |p|
 		package p do
 			action :purge
 		end
 	end
 	package "percona-xtradb-cluster-server-5.5"
-when "redhat","centos","oracle","amazon"
+when "rhel"
     # Percona XtraDB Cluster depends on this.
     # http://www.percona.com/doc/percona-xtradb-cluster/5.5/installation/yum_repo.html
     include_recipe "epel"
