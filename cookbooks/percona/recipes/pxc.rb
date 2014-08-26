@@ -23,7 +23,14 @@ when "ubuntu","debian","gcel"
 	end
 	package "percona-xtradb-cluster-server-5.5"
 when "redhat","centos","oracle","amazon"
-	package "Percona-XtraDB-Cluster-server-55"
+    # Percona XtraDB Cluster depends on this.
+    # http://www.percona.com/doc/percona-xtradb-cluster/5.5/installation/yum_repo.html
+    include_recipe "epel"
+    package "socat" 
+
+	yum_package "Percona-XtraDB-Cluster-server-55" do
+        options "--exclude mysql"
+    end
 end
 
 service "mysql" do

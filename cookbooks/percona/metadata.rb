@@ -4,4 +4,4 @@ version           "0.0.1"
 name              "percona"
 depends           "apt"
 depends           "yum"
-
+depends           "epel"
