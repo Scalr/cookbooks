@@ -28,15 +28,15 @@ when "debian"
 
 when "redhat","centos","oracle","amazon","scientific"
     if not (node[:platform] == 'centos' and node[:platform_version].to_i == 7)
-	execute "rpm -Uvh http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm" do
-        	not_if "rpm -q scalr-release-2-1.noarch"
-	end
+        execute "rpm -Uvh http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm" do
+            not_if "rpm -q scalr-release-2-1.noarch"
+        end
 
         yum_package "redis" do
-	    options = '--disablerepo="*" --enablerepo="scalr"'
+        options = '--disablerepo="*" --enablerepo="scalr"'
         end
     else
-	yum_package "redis.x86_64"
+        yum_package "redis"
     end
 
     cookbook_file "/etc/redis.conf" do

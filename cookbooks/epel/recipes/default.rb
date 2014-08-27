@@ -44,9 +44,8 @@ when "redhat","centos","oracle","scientific","amazon"
 	elsif node[:platform] == 'centos' and node[:platform_version].to_i == 7
 	    bash "yum update" do
             code <<-EOS
+            cd /etc/yum.repos.d/
         	rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7
-        	yum clean metadata
-        	yum clean all
         	yum update -y
 	        EOS
 	    end
