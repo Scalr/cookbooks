@@ -41,6 +41,8 @@ service "apache2" do
 	action [ :disable, :stop ]
 end
 
-include_recipe "apache2::mod_ssl"
-include_recipe "apache2::mod_rpaf"
+if not (node[:platform] == 'centos' and node[:platform_version].to_i == 7) then
+    include_recipe "apache2::mod_rpaf"
+end
 include_recipe "apache2::mod_php5"
+include_recipe "apache2::mod_ssl"
