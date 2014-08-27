@@ -35,5 +35,5 @@ suites:
     run_list:
         - recipe[postgresql::default]
     attributes:
-         postgresql:
+        postgresql:
             version: "9.2"

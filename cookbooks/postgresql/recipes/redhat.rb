@@ -1,5 +1,14 @@
-include_recipe 'postgresql::yum_pgdg_postgresql'
+include_recipe "yum"
 
+yum_repository "PGDG" do
+   description "Posgresql repo"
+   baseurl     "http://yum.pgrpms.org/#{node[:postgresql][:version]}/redhat/rhel-$releasever-$basearch"
+   gpgkey      "http://yum.postgresql.org/RPM-GPG-KEY-PGDG"
+   gpgcheck    true
+   enabled     true
+   action      :create
+end
+   
 node['postgresql']['packages'].each do |pkg| 
     package pkg
 end
