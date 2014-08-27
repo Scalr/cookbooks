@@ -15,7 +15,6 @@ when "debian"
 	
 when "rhel"
     include_recipe "yum"
-	arch = node[:kernel][:machine]  =~ /x86_64/ ? "x86_64" : "i386"
     yum_repository "percona" do
         description "Percona YUM repo"
         baseurl     "http://repo.percona.com/centos/$releasever/os/$basearch/"
