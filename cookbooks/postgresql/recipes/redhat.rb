@@ -13,7 +13,7 @@ node['postgresql']['packages'].each do |pkg|
     package pkg
 end
 
-execute "service #{node[:postgresql][:service_name]} initdb"
+execute node["postgresql"]["initdb_command"]
 
 service "#{node[:postgresql][:service_name]} " do
   action [:disable, :stop]
