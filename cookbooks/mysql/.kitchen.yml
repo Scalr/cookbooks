@@ -28,7 +28,7 @@ platforms:
 suites:
   - name: default
     run_list:
-        - recipe[mysql::server]
+        - recipe[mysql::default]
     attributes:
         mysql:
             version: "5.6"
