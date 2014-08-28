@@ -3,11 +3,11 @@ package "mysql-server" do
 end
 
 package "iptables" do
-	action :install
+    action :install
 end
 
 package "git" do
-	action :install
+    action :install
 end
 
 
@@ -58,5 +58,5 @@ end
 
 
 service "mysql" do
-	action [:disable, :stop]
+    action [:disable, :stop]
 end

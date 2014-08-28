@@ -12,7 +12,7 @@ when "debian"
         key          "CD2EFD2A"
         action       :add
     end
-	
+    
 when "rhel"
     include_recipe "yum"
     yum_repository "percona" do
