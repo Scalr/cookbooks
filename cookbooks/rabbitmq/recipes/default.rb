@@ -4,10 +4,10 @@ when "debian"
     package "erlang-nox"
 
 when "rhel"
-	raise if node[:platform_version].to_f < 6
+    raise if node[:platform_version].to_f < 6
 
-	include_recipe "epel"
-	package "erlang"
+    include_recipe "epel"
+    package "erlang"
 end
 
 remote_file node["rabbitmq"]["package_path"] do

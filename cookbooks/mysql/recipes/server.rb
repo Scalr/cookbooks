@@ -30,5 +30,5 @@ end
 package node['mysql']['package_server_name']
 
 service "mysql" do
-	action [ :disable, :stop ]
+    action [ :disable, :stop ]
 end

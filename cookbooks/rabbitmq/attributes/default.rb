@@ -10,7 +10,7 @@ default["rabbitmq"]["package_path"] = File.join(node["rabbitmq"]["cache_dir"], n
 default["rabbitmq"]["package_provider"] = 
     case node["platform_family"]
     when "debian"
-	    Chef::Provider::Package::Dpkg
+        Chef::Provider::Package::Dpkg
     when "rhel"
         Chef::Provider::Package::Rpm
     end

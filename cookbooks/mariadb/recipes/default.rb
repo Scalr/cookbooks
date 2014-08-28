@@ -16,16 +16,16 @@ when 'debian'
         action :add
     end
 
-	package "mysql-client" do
-	  action :purge
-	end
+    package "mysql-client" do
+      action :purge
+    end
 
-	package "mariadb-server" do
-	  action :install
-	  options "--no-install-recommends"
-	end
+    package "mariadb-server" do
+      action :install
+      options "--no-install-recommends"
+    end
 
-	package "mariadb-client"
+    package "mariadb-client"
 
 when 'rhel'
     include_recipe 'yum'
@@ -37,24 +37,24 @@ when 'rhel'
         gpgkey      'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
     end
 
-	package "mysql" do
-	  action :remove
-	end
+    package "mysql" do
+      action :remove
+    end
 
-	# postfix requires mysql-libs
-	execute "rpm -e --nodeps mysql-libs" do
+    # postfix requires mysql-libs
+    execute "rpm -e --nodeps mysql-libs" do
         only_if "rpm -q mysql-libs"
-	end
+    end
 
-	package "MariaDB-server"
-	package "MariaDB-client"
+    package "MariaDB-server"
+    package "MariaDB-client"
 
-	#cookbook_file "/etc/my.cnf" do
-	#  source "my-medium.cnf"
+    #cookbook_file "/etc/my.cnf" do
+    #  source "my-medium.cnf"
     #      mode "0644"
-	#end
+    #end
 end
 
 service "mysql" do
-	action [ :disable, :stop ]
+    action [ :disable, :stop ]
 end
