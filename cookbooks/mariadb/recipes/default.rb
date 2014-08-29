@@ -28,15 +28,6 @@ when 'debian'
     package "mariadb-client"
 
 when 'rhel'
-    include_recipe 'yum'
-
-    arch = node[:kernel][:machine] =~ /x86_64/ ? "amd64" : "x86"
-    yum_repository 'mariadb' do
-        description 'Mariadb repo'
-        baseurl     "http://yum.mariadb.org/#{node[:mariadb][:version]}/#{node[:platform]}#{node[:platform_version].to_i}-#{arch}"
-        gpgkey      'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
-    end
-
     package "mysql" do
       action :remove
     end
@@ -46,8 +37,23 @@ when 'rhel'
         only_if "rpm -q mysql-libs"
     end
 
-    package "MariaDB-server"
-    package "MariaDB-client"
+    # XXX: Disable this check once the official MariaDB repo for Centos 7 is available
+    if platform?("centos") && node["platform_version"].to_i == 7
+        package "mariadb-server"
+        package "mariadb"
+    else
+        include_recipe 'yum'
+
+        arch = node[:kernel][:machine] =~ /x86_64/ ? "amd64" : "x86"
+        yum_repository 'mariadb' do
+            description 'Mariadb repo'
+            baseurl     "http://yum.mariadb.org/#{node[:mariadb][:version]}/#{node[:platform]}#{node[:platform_version].to_i}-#{arch}"
+            gpgkey      'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
+        end
+
+        package "MariaDB-server"
+        package "MariaDB-client"
+    end
 
     #cookbook_file "/etc/my.cnf" do
     #  source "my-medium.cnf"
@@ -56,5 +62,5 @@ when 'rhel'
 end
 
 service "mysql" do
-    action [ :disable, :stop ]
+    action [:disable, :stop]
 end

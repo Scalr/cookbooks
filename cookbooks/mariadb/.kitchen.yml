@@ -23,6 +23,10 @@ platforms:
       - recipe[apt]
   - name: centos-5.10
   - name: centos-6.4
+  - name: centos7
+    driver:
+      box: centos7
+      box_url: https://vagrantcloud.com/hfm4/centos7/version/6/provider/virtualbox.box
 
 
 suites:
