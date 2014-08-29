@@ -16,6 +16,8 @@ when "rhel"
             "service #{node[:postgresql][:service_name]} initdb" 
         end
 
+    default['postgresql']['platform_version'] = platform?("amazon") ? 6 : node["platform_version"].to_i
+
 when "debian"
      default['postgresql']['dir'] = "/etc/postgresql/#{version}/main"
      default['postgresql']['service_name'] = "postgresql"

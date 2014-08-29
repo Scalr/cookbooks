@@ -2,7 +2,7 @@ include_recipe "yum"
 
 yum_repository "PGDG" do
    description "Posgresql repo"
-   baseurl     "http://yum.pgrpms.org/#{node[:postgresql][:version]}/redhat/rhel-$releasever-$basearch"
+   baseurl     "http://yum.pgrpms.org/#{node[:postgresql][:version]}/redhat/rhel-#{node[:postgresql][:platform_version]}-$basearch"
    gpgkey      "http://yum.postgresql.org/RPM-GPG-KEY-PGDG"
    gpgcheck    true
    enabled     true
