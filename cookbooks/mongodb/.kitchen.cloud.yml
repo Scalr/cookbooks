@@ -1,0 +1,27 @@
+---
+driver:
+   name: ec2
+   aws_access_key_id: <%= ENV['EC2_ACCESS_KEY'] %>
+   aws_secret_access_key: <%= ENV['EC2_SECRET_KEY'] %>
+   aws_ssh_key_id: vagrant
+   ssh_key: <%= ENV['EC2_VAGRANT_SSH_KEY'] %>
+   availability_zone: us-east-1c
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: latest
+
+platforms:
+- name: Amazon-Linux-201403
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-d2817cba
+    username: ec2-user
+
+suites:
+- name: default
+  run_list:
+      - recipe[mongodb::default]
+  attributes:
+      mongodb:
+          version: "2.4"
