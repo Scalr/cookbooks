@@ -17,40 +17,15 @@
 # limitations under the License.
 #
 
-version = node[:platform_version].to_f
 
-case node.platform
-#when "centos","redhat","fedora","oracle","amazon"
-#  include_recipe "jpackage"
-#end
-when "ubuntu"
-  if version >= 12.04
-    tomcat = "tomcat7"
-  else
-    tomcat = "tomcat6"
-  end
-  tomcat_pkgs = [tomcat, "#{tomcat}-admin"]
-
-when "debian"
-  if version >= 7
-    tomcat = "tomcat7"
-  else
-    tomcat = "tomcat6"
-  end
-  tomcat_pkgs = [tomcat, "#{tomcat}-admin"]
-
-when "centos","redhat","fedora","oracle","amazon"
-  include_recipe "epel"
-  tomcat = "tomcat"
-  tomcat_pkgs = [tomcat, "#{tomcat}-admin-webapps"]
+if platform_family?("rhel") && node["tomcat"]["from_epel"]
+        include_recipe "epel"
 end
 
-
-tomcat_pkgs.each do |pkg|
-  package pkg
+node["tomcat"]["packages"].each do |pkg|
+    package pkg
 end
 
-
-service tomcat do
-  action [ :disable, :stop ]
+service node['tomcat']['service_name'] do
+  action [:disable, :stop]
 end

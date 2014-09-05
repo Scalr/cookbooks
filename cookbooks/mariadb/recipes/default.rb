@@ -1,77 +1,65 @@
-
-
 package "mysql-server" do
   action :purge
 end
 
-case node[:platform]
-when "ubuntu", "debian"
-	package "mysql-client" do
-	  action :purge
-	end
 
-	execute "request mariadb key" do
-	  command "apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db"
-	  not_if "apt-key list | grep 1BB943DB"
-	end
-	
-	execute "apt-get update" do
-	  action :nothing
-	end
+case node["platform_family"]
+when 'debian'
+    include_recipe 'apt'
 
-	template "/etc/apt/sources.list.d/mariadb.list" do
-  		source "mariadb.list.erb"
-  		mode "0644"
-  		variables( :codename => node[:lsb][:codename])
-		notifies :run, resources("execute[apt-get update]"), :immediately
-	end
+    apt_repository 'mariadb' do
+        uri "http://mirrors.supportex.net/mariadb/repo/#{node[:mariadb][:version]}/#{node[:platform]}"
+        distribution node['lsb']['codename']
+        components ['main']
+        keyserver 'keyserver.ubuntu.com'
+        key '0xcbcb082a1bb943db'
+        action :add
+    end
 
-	package "mariadb-server" do
-	  action :install
-	  options "--no-install-recommends"
-	end
+    package "mysql-client" do
+      action :purge
+    end
 
-	package "mariadb-client"
+    package "mariadb-server" do
+      action :install
+      options "--no-install-recommends"
+    end
 
+    package "mariadb-client"
 
-when "redhat", "centos", "oracle", "amazon"
+when 'rhel'
+    package "mysql" do
+      action :remove
+    end
 
-	package "mysql" do
-	  action :purge
-	end
+    # postfix requires mysql-libs
+    execute "rpm -e --nodeps mysql-libs" do
+        only_if "rpm -q mysql-libs"
+    end
 
-	# postfix requires mysql-libs
-	execute "rpm -e --nodeps mysql-libs" do
-    only_if "rpm -q mysql-libs"
-	end
-	
-	yum_package "gpg"
+    # XXX: Disable this check once the official MariaDB repo for Centos 7 is available
+    if platform?("centos") && node["platform_version"].to_i == 7
+        package "mariadb-server"
+        package "mariadb"
+    else
+        include_recipe 'yum'
 
-	arch = node[:kernel][:machine]  =~ /x86_64/ ? "amd64" : "x86"
-	platform = node[:platform] == "redhat" ? "rhel" : "centos"
+        yum_repository 'mariadb' do
+            description 'Mariadb repo'
+            baseurl     node["mariadb"]["yum_repo_url"]
+            gpgkey      'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
+        end
 
-	template "/etc/yum.repos.d/mariadb.repo" do
-		source "mariadb.repo.erb"
-		mode = "0644"
-		variables(
-			:arch => arch,
-			:platform => platform
-		)
-	end
+        package "MariaDB-server"
+        package "MariaDB-client"
+    end
 
-	yum_package "MariaDB-server" do
-		action :install
-		flush_cache [:before]
-	end
-
-	yum_package "MariaDB-client"
-
-	#cookbook_file "/etc/my.cnf" do
-	#  source "my-medium.cnf"
+    #cookbook_file "/etc/my.cnf" do
+    #  source "my-medium.cnf"
     #      mode "0644"
-	#end
+    #end
 end
 
 service "mysql" do
-	action [ :disable, :stop ]
+    action [:disable, :stop]
 end

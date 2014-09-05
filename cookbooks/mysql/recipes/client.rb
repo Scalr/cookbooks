@@ -17,9 +17,4 @@
 # limitations under the License.
 #
 
-case node[:node]
-when "centos","redhat","oracle"
-	package "mysql"
-when "debian","ubuntu"
-	package "mysql-client"
-end
+package node['mysql']['package_client_name']

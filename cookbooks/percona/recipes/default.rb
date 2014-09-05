@@ -3,47 +3,36 @@ package "mysql-server" do
 end
 
 package "iptables" do
-	action :install
+    action :install
 end
 
 package "git" do
-	action :install
+    action :install
+    not_if "which git"
 end
 
 
 include_recipe "percona::repo"
 
-case node[:platform]
-when "ubuntu","debian","gcel"
+case node["platform_family"]
+when "debian"
     package "mysql-client" do
       action :purge
     end
 
-    if node[:platform] == "debian"
-        version = '5.5'
-    elsif node[:lsb][:release].to_f >= 14.04
-        version = '5.6'
-    elsif node[:lsb][:release].to_f >= 12.04
-        version = '5.5'
-    else
-        version = '5.1'
-    end
-
-    package "percona-server-server-#{version}" do
+    package "percona-server-server-#{node[:percona][:version]}" do
         action :install
         options "--no-install-recommends"
     end
 
-    package "percona-server-client-#{version}"
+    package "percona-server-client-#{node[:percona][:version]}"
 
     cookbook_file "/etc/mysql/my.cnf" do
         source "my-medium.cnf"
         mode "0644"
     end
 
-
-when "redhat","centos","oracle","amazon"
-
+when "rhel"
     package "mysql" do
       action :purge
     end
@@ -53,15 +42,11 @@ when "redhat","centos","oracle","amazon"
         only_if "rpm -q mysql-libs"
     end
 
-    if node[:platform_version].to_f >= 6.0
-        version = '55'
-    else
-        version = '51'
-    end
+    version = node["percona"]["version"].sub(/\./, '')
 
     yum_package "Percona-Server-server-#{version}" do
-            action :install
-            flush_cache [:before]
+        action :install
+        flush_cache [:before]
     end
 
     yum_package "Percona-Server-client-#{version}"
@@ -74,5 +59,5 @@ end
 
 
 service "mysql" do
-	action [ :disable, :stop ]
+    action [:disable, :stop]
 end

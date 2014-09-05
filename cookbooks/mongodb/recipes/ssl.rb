@@ -2,12 +2,12 @@ case node[:platform_family]
 # Debian like os
 when "debian"
     # Install requirements
-	execute "sudo apt-get update && sudo apt-get install git-core build-essential scons libssl-dev  libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev -y"
+    execute "sudo apt-get update && sudo apt-get install git-core build-essential scons libssl-dev  libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev -y"
 
 # Red hat like os
 when "rhel"
     # Install requirements
-	execute "sudo yum install git scons gcc-c++ glibc-devel openssl-devel -y"
+    execute "sudo yum install git scons gcc-c++ glibc-devel openssl-devel -y"
 end
 
 # Get source

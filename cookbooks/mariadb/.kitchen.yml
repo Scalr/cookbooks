@@ -1,0 +1,38 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-10.04
+    run_list:
+      - recipe[apt]
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+  - name: ubuntu-14.04
+    run_list:
+      - recipe[apt]
+  - name: debian-6.0.8
+    run_list:
+      - recipe[apt]
+  - name: debian-7.4
+    run_list:
+      - recipe[apt]
+  - name: centos-5.10
+  - name: centos-6.4
+  - name: centos7
+    driver:
+      box: centos7
+      box_url: https://vagrantcloud.com/hfm4/centos7/version/6/provider/virtualbox.box
+
+
+suites:
+  - name: default
+    run_list:
+        - recipe[mariadb::default]
+    attributes:
+        mariadb:
+            version: "5.5"

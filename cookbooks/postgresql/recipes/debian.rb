@@ -1,26 +1,19 @@
-execute "apt-get update" do
-  action :nothing
+include_recipe "apt"
+
+apt_repository 'apt.postgresql.org' do
+  uri 'http://apt.postgresql.org/pub/repos/apt'
+  distribution "#{node['postgresql']['pgdg']['release_apt_codename']}-pgdg"
+  components ['main', node['postgresql']['version']]
+  key 'http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc'
+  action :add
 end
 
-if node[:platform] == "debian" or (node[:platform] == "ubuntu" and [14.04, 13.10, 12.04, 10.04].include?(node[:lsb][:release].to_f))
-        version = 9.3
-        codename = node[:lsb][:codename]
-        execute "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -"
-        template "/etc/apt/sources.list.d/pgdg.list" do
-                source "pgdg.list.erb"
-                mode "0644"
-                variables( :codename => codename)
-                notifies :run, resources("execute[apt-get update]"), :immediately
-        end
-else
-        version = 9.1
+node['postgresql']['packages'].each do |pkg|
+    package pkg
 end
 
-package "postgresql-#{version}"
-package "postgresql-client-#{version}"
-
-service "postgresql" do
+service "#{node['postgresql']['service_name']}" do
   action [:disable, :stop]
 end
 
-execute "sed -i \"s/.*listen_addresses.*/listen_addresses = '*'/g\" /etc/postgresql/#{version}/main/postgresql.conf"
+execute "sed -i \"s/.*listen_addresses.*/listen_addresses = '*'/g\" #{node[:postgresql][:dir]}/postgresql.conf"

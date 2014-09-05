@@ -1,64 +1,17 @@
-include_recipe "epel"
-  
-case node[:platform]
-when "ubuntu"
-	
-	execute "apt-get update" do
-	  action :nothing
-	end
+if node["redis"]["version"]
+    include_recipe "redis::versioned_install"
+else
+    include_recipe "redis::regular_install"
+end
 
-	template "/etc/apt/sources.list.d/chris-lea-redis-server.list" do
-  		source "chris-lea-redis-server.list.erb"
-  		mode "0644"
-		variables(:codename => node[:lsb][:codename])
-  		notifies :run, resources("execute[apt-get update]"), :immediately
-	end
-
-	package "redis-server" do
-		action :install
-		options "--force-yes"
-	end
-	
-	service "redis-server" do
-		action [ :disable, :stop ]
-	end
-
-when "debian"
-	version = node[:platform_version].to_f
-
-	if 6.0 <= version and version < 7.0
-		cookbook_file "/etc/apt/sources.list.d/squeeze-backports.list"
-		execute "apt-get update" 
-		execute "apt-get install -y -t squeeze-backports redis-server" 
-	elsif version >= 7
-        cookbook_file "/etc/apt/sources.list.d/wheezy-backports.list"
-        execute "apt-get update"
-		execute "apt-get install -y -t wheezy-backports redis-server"
-	end
-
-	service "redis-server" do
-		action [ :disable, :stop ]
-	end
-		
-
-when "redhat","centos","oracle","amazon","scientific"
-
-    execute "rpm -Uvh http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm" do
-        not_if "rpm -q scalr-release-2-1.noarch"
+if platform_family?("rhel")
+    cookbook_file "/etc/redis.conf" do
+        source node["redis"]["config_file"]
+        owner "redis"
+        group "redis"
     end
+end
 
-    yum_package "redis" do
-        options = '--disablerepo="*" --enablerepo="scalr"'
-    end
-
-	service "redis" do
-		action [ :disable, :stop ]
-	end
-
-	cookbook_file "/etc/redis.conf" do
-		owner "redis"
-		group "redis"
-	end
-
-
+service node["redis"]["service_name"] do
+    action [:disable, :stop]
 end
