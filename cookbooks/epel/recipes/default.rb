@@ -20,7 +20,7 @@ when "redhat","centos","oracle","scientific","amazon"
 	if (node[:platform_version].to_f >= 6.0 and node[:platform_version].to_f < 7) or node[:platform] == "amazon"
 		epel_rpm = "http://dl.fedoraproject.org/pub/epel/6/#{arch}/epel-release-6-8.noarch.rpm"
 	elsif node[:platform] == 'centos' and node[:platform_version].to_i == 7
-		epel_rpm = "http://mirror.omnilance.com/epel/beta/7/#{arch}/epel-release-7-0.2.noarch.rpm"
+		epel_rpm = "http://dl.fedoraproject.org/pub/epel/7/#{arch}/e/epel-release-7-1.noarch.rpm"
 	else
 		epel_rpm = "http://dl.fedoraproject.org/pub/epel/5/#{arch}/epel-release-5-4.noarch.rpm"
 	end
