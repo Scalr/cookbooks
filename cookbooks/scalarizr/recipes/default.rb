@@ -70,10 +70,10 @@ else
                 package_name "yum-priorities"
             end
         end
-        baseurl = "http://buildbot.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/rhel/$releasever/$basearch"
-        if node[:platform] == "fedora"
-            baseurl = "http://buildbot.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/fedora/$releasever/$basearch"
-        end
+        dist = platform?("fedora") ? "fedora" : "rhel"
+        releasever = platform?("amazon") ? "6" : "$releasever"
+        baseurl = "http://buildbot.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/#{dist}/#{releasever}/$basearch"
+
         execute "echo -e '[scalr-#{node[:scalarizr][:branch]}]\nname=scalr branch\n' > /etc/yum.repos.d/scalr-branch.repo"
         execute "echo -e 'baseurl=#{baseurl}\nenabled=1\ngpgcheck=0\npriority=10' >> /etc/yum.repos.d/scalr-branch.repo"
         execute "yum clean all"
