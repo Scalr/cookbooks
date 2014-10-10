@@ -27,4 +27,5 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[postgresql::default]
+      - recipe[apache2::default]
+  attributes:

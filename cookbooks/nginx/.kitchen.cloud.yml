@@ -18,13 +18,8 @@ platforms:
     image_id: ami-50842d38 
     username: ec2-user
 
-- name: Amazon-Linux-201403
-  driver_plugin: ec2
-  driver_config:
-    image_id: ami-d2817cba
-    username: ec2-user
-
 suites:
 - name: default
   run_list:
-  - recipe[postgresql::default]
+      - recipe[nginx::default]
+  attributes:

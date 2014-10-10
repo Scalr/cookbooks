@@ -10,7 +10,9 @@ yum_repository "PGDG" do
 end
    
 node['postgresql']['packages'].each do |pkg| 
-    package pkg
+    yum_package pkg do
+        options '--disablerepo="*" --enablerepo=PGDG'
+    end
 end
 
 execute node["postgresql"]["initdb_command"]

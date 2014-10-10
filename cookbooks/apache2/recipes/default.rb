@@ -16,32 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-if node[:platform] == 'debian' and node[:platform_version].to_f < 7 then
+if node["platform"] == 'debian' and node["platform_version"].to_f < 7 then
   execute "wget http://ftp.us.debian.org/debian/pool/main/s/ssl-cert/ssl-cert_1.0.32_all.deb && dpkg -i ssl-cert_1.0.32_all.deb"
 end
 
-package "apache2" do
-  case node[:platform]
-  when "centos","redhat","oracle","fedora","suse","amazon"
-    package_name "httpd"
-  when "debian","ubuntu"
-    package_name "apache2"
-  end
-  action :install
+package node["apache2"]["package_name"]
+
+service node["apache2"]["service_name"] do
+    action [:disable, :stop]
 end
 
-service "apache2" do
-	case node[:platform]
-	when "redhat","centos","oracle","scientific","fedora","suse","amazon"
-		service_name "httpd"
-	when "debian","ubuntu"
-		service_name "apache2"
-	end
-	
-	action [ :disable, :stop ]
-end
-
-if not (node[:platform] == 'centos' and node[:platform_version].to_i == 7) then
+if not (node["platform"] == 'centos' and node["platform_version"].to_i == 7) and
+    not (node["apache2"]["package_name"] == "httpd24") then
     include_recipe "apache2::mod_rpaf"
 end
 include_recipe "apache2::mod_php5"

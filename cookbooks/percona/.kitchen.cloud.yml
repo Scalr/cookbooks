@@ -12,6 +12,12 @@ provisioner:
   require_chef_omnibus: latest
 
 platforms:
+- name: Amazon-Linux-2014-09
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-50842d38 
+    username: ec2-user
+
 - name: Amazon-Linux-201403
   driver_plugin: ec2
   driver_config:
@@ -24,4 +30,4 @@ suites:
       - recipe[percona::default]
   attributes:
       percona:
-          version: "5.5"
+          version: "5.6"

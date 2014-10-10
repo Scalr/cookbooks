@@ -17,10 +17,14 @@
 # limitations under the License.
 #
 
-case node[:platform]
-when "centos","redhat","oracle","amazon"
-  package "mod_ssl"
-when "debian","ubuntu"
+case node["platform_family"]
+when "rhel"
+    if platform?("amazon") && node["apache2"]["package_name"] == 'httpd24'
+        package "mod24_ssl"
+    else
+      package "mod_ssl"
+    end
+when "debian"
   execute "a2enmod ssl"
 end
 

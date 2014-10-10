@@ -12,11 +12,11 @@ when "debian"
     default["tomcat"]["packages"] = [tomcat, "#{tomcat}-admin"]
 
 when "rhel"
-    if node["tomcat"]["version"] == '7'
+    if node["tomcat"]["version"] == '7' && !platform?("amazon")
         tomcat = "tomcat"
         default["tomcat"]["from_epel"] = true
     end
     default["tomcat"]["packages"] = [tomcat, "#{tomcat}-admin-webapps"]
 end
 
-default["tomcat"]["service_name"] = tomcat 
+default["tomcat"]["service_name"] = tomcat

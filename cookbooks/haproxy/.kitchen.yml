@@ -28,6 +28,5 @@ platforms:
 suites:
   - name: default
     run_list:
-        - recipe[redis::default]
+        - recipe[haproxy::default]
     attributes:
-        redis:

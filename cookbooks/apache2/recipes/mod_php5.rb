@@ -17,26 +17,27 @@
 # limitations under the License.
 #
 
-case node[:platform]
-when "debian", "ubuntu"
-  package "libapache2-mod-php5"
-  package "php5-cli"
-  package "php5-mysql"
-  if node[:platform] == "ubuntu" and node[:platform_version].to_f < 13.10
-    package "php5-suhosin" do
-      action :install
-      ignore_failure true
+case node["platform_family"]
+when "debian"
+    package "libapache2-mod-php5"
+    package "php5-cli"
+    package "php5-mysql"
+    if platform?("ubuntu") and node["platform_version"].to_f < 13.10
+        package "php5-suhosin" do
+            action :install
+            ignore_failure true
+        end
     end
-  end
 
+when "rhel"
+    php = if platform?("centos") and node["platform_version"].to_f < 6.0
+              "php53"
+          elsif platform?("amazon") and node["platform_version"] == "2014.09"
+              "php54"
+          else
+              "php"
+          end
 
-when "centos", "redhat", "oracle", "amazon"
-  if node[:platform] == "centos" and node[:platform_version].to_f < 6.0
-    php = "php53"
-  else
-    php = "php"
-  end
-
-  package "#{php}"
-  package "#{php}-mysql"
+    package "#{php}"
+    package "#{php}-mysql"
 end
