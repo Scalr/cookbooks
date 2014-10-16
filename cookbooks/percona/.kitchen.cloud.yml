@@ -15,14 +15,14 @@ platforms:
 - name: Amazon-Linux-2014-09
   driver_plugin: ec2
   driver_config:
-    image_id: ami-50842d38 
+    image_id: ami-50842d38
     username: ec2-user
 
-- name: Amazon-Linux-201403
+- name: CentOS7
   driver_plugin: ec2
   driver_config:
-    image_id: ami-d2817cba
-    username: ec2-user
+      image_id: ami-b2c505da
+      username: ec2-user
 
 suites:
 - name: default
@@ -30,4 +30,3 @@ suites:
       - recipe[percona::default]
   attributes:
       percona:
-          version: "5.6"
