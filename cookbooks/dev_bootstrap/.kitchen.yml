@@ -15,9 +15,6 @@ platforms:
   - name: ubuntu-14.04
     run_list:
       - recipe[apt]
-  - name: ubuntu-14.10
-    run_list:
-      - recipe[apt]
   - name: debian-6.0.8
     run_list:
       - recipe[apt]
