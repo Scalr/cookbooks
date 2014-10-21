@@ -8,63 +8,71 @@
 #
 include_recipe "epel"
 
-case node[:platform]
-when "debian","ubuntu"
-	execute "cd /tmp && wget http://apt.scalr.net/scalr-repository_0.3_all.deb && dpkg -i /tmp/scalr-repository_0.3_all.deb && rm -f /tmp/scalr-repository_0.3_all.deb"
-    execute "apt-get update"
-    execute "rm -rf /etc/apt/sources.list.d/scalr*"
-    cookbook_file "/etc/apt/sources.list.d/scalr-stable.list" do
-    	  source "scalr-stable.list"
-              mode "0644"
+case node["platform_family"]
+when "debian"
+    if not (platform?("ubuntu") and node["platform_version"] == '14.10')
+        # old version
+        execute "cd /tmp && wget http://apt.scalr.net/scalr-repository_0.3_all.deb && dpkg -i /tmp/scalr-repository_0.3_all.deb && rm -f /tmp/scalr-repository_0.3_all.deb"
+        execute "apt-get update"
+        execute "rm -rf /etc/apt/sources.list.d/scalr*"
+        cookbook_file "/etc/apt/sources.list.d/scalr-stable.list" do
+            source "scalr-stable.list"
+            mode "0644"
+        end
+        execute "apt-get update"
+        package "scalarizr-devtools"
+    else
+        # new version
+        # switch once strider is ready
+        include_recipe "apt"
+        apt_repository "scalr-branch" do
+            uri "http://stridercd.scalr-labs.com/apt/develop"
+            components ["feature-omnibus-integration", "main"]
+            keyserver "keyserver.ubuntu.com"
+            key "04B54A2A"
+        end
+
+        package "scalarizr"
     end
-    execute "apt-get update"
-    package "scalarizr-devtools"
 
-when "redhat","centos","oracle","amazon"
-
-  if node[:platform_version] < "6.0"
-    yum_package "python26"
-  end
-  if not (node[:platform] == 'centos' and node[:platform_version].to_i == 7)
-    execute "rpm -Uvh http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm" do
-        not_if "rpm -q scalr-release-2-1.noarch"
+when "rhel"
+    if node["platform_version"] < "6.0"
+        yum_package "python26"
     end
 
-    execute "rm -rf /etc/yum.repos.d/scalr*"
+    if not (platform?("centos") and node["platform_version"].to_i == 7)
+        # old version
+        execute "rpm -Uvh http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm" do
+            not_if "rpm -q scalr-release-2-1.noarch"
+        end
 
-    cookbook_file "/etc/yum.repos.d/scalr-stable.repo" do
-          	  source "scalr-stable.repo"
-               mode "0644"
-    end
-    yum_package "scalarizr-devtools"
-  else
-    %w{python-devel wget openssh}.each do |pkg|
-      package pkg do
-        action :upgrade
-      end
-    end
-    remote_file "/tmp/scalarizr.rpm" do
-		source "http://stridercd.scalr.ws/rpm/feature-omnibus-integration/rhel/7Server/x86_64/scalarizr-2.9.b5622.b7ce53a6-1.x86_64.rpm"
-		mode "0644"
-	end
-	remote_file "/tmp/scalarizr-ec2.rpm" do
-		source "http://stridercd.scalr.ws/rpm/feature-omnibus-integration/rhel/7Server/x86_64/scalarizr-ec2-2.9.b5622.b7ce53a6-1.x86_64.rpm"
-		mode "0644"
-	end
-	package "scalarizr" do
-		action :install
-		source "/tmp/scalarizr.rpm"
-		provider Chef::Provider::Package::Rpm
-	end
-  end
+        execute "rm -rf /etc/yum.repos.d/scalr*"
 
+        cookbook_file "/etc/yum.repos.d/scalr-stable.repo" do
+            source "scalr-stable.repo"
+            mode "0644"
+        end
+        yum_package "scalarizr-devtools"
+    else
+        # new version
+        # switch once strider is ready
+        include_recipe "yum"
+        yum_repository "scalr-branch" do
+            description "Scalr repo"
+            baseurl "http://stridercd.scalr-labs.com/rpm/feature-omnibus-integration/rhel/$releasever/$basearch"
+            gpgcheck false 
+            action :create
+        end
+
+        package "scalarizr"
+    end
 end
 
 package "vim"
 bash "ipython install" do
     code <<-EOS
-    wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
-    python /tmp/get-pip.py
-    pip install ipython
-	EOS
+        wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+        python /tmp/get-pip.py
+        pip install ipython==1.2.1
+    EOS
 end

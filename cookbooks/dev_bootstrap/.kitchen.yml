@@ -23,11 +23,11 @@ platforms:
       - recipe[apt]
   - name: centos-5.10
   - name: centos-6.4
+  - name: centos-7.0
 
 
 suites:
   - name: default
     run_list:
-        - recipe[redis::default]
+        - recipe[dev_bootstrap::default]
     attributes:
-        redis:

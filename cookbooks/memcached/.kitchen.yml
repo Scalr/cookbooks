@@ -28,6 +28,5 @@ platforms:
 suites:
   - name: default
     run_list:
-        - recipe[redis::default]
+        - recipe[memcached::default]
     attributes:
-        redis:
