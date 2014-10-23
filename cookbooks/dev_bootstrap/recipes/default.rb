@@ -69,10 +69,14 @@ when "rhel"
 end
 
 package "vim"
+# Install pip
+remote_file "/tmp/get-pip.py" do
+    source "https://bootstrap.pypa.io/get-pip.py"
+end
 bash "ipython install" do
     code <<-EOS
-        wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
         python /tmp/get-pip.py
         pip install ipython==1.2.1
     EOS
 end
+
