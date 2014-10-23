@@ -24,6 +24,12 @@ platforms:
     image_id: ami-d2817cba
     username: ec2-user
 
+- name: CentOS7
+  driver_plugin: ec2
+  driver_config:
+      image_id: ami-b2c505da
+      username: ec2-user
+
 suites:
 - name: default
   run_list:

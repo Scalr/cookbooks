@@ -32,27 +32,23 @@ when 'rhel'
       action :remove
     end
 
-    # postfix requires mysql-libs
-    execute "rpm -e --nodeps mysql-libs" do
-        only_if "rpm -q mysql-libs"
-    end
-
-    # XXX: Disable this check once the official MariaDB repo for Centos 7 is available
-    if platform?("centos") && node["platform_version"].to_i == 7
-        package "mariadb-server"
-        package "mariadb"
-    else
-        include_recipe 'yum'
-
-        yum_repository 'mariadb' do
-            description 'Mariadb repo'
-            baseurl     node["mariadb"]["yum_repo_url"]
-            gpgkey      'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
+    # postfix requires mysql-libs or mariadb-libs
+    %w{mysql-libs mariadb-libs}.each do |pkg|
+        execute "rpm -e --nodeps #{pkg}" do
+            only_if "rpm -q #{pkg}"
         end
-
-        package "MariaDB-server"
-        package "MariaDB-client"
     end
+
+    include_recipe 'yum'
+    yum_repository 'mariadb' do
+        description 'Mariadb repo'
+        baseurl     node["mariadb"]["yum_repo_url"]
+        gpgkey      'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB'
+    end
+
+    package "MariaDB-server"
+    package "MariaDB-client"
+    package "MariaDB-shared"
 
     #cookbook_file "/etc/my.cnf" do
     #  source "my-medium.cnf"
