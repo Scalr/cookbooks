@@ -33,7 +33,7 @@ when "redhat","centos","oracle","amazon","scientific"
         end
 
         yum_package "redis" do
-        options = '--disablerepo="*" --enablerepo="scalr"'
+        options '--disablerepo="*" --enablerepo="scalr"'
         end
     else
         yum_package "redis"
