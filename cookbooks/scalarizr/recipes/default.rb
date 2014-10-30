@@ -80,8 +80,15 @@ else
     end
 end
 
-case node[:platform]
-when "redhat","centos","oracle","amazon","scientific"
+if platform_family?("rhel")
+    if platform?("amazon") && node["platform_version"] == '2014.03'
+        yum_package "python-boto" do
+           options "--disablerepo='*' --enablerepo='scalr'"
+           flush_cache [:before]
+           action :upgrade
+        end
+    end
+
     yum_package "scalarizr-#{node[:scalarizr][:platform]}" do
        options "-x exim"
        flush_cache [:before]
