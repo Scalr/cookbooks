@@ -68,15 +68,20 @@ when "rhel"
     end
 end
 
-package "vim"
-# Install pip
-remote_file "/tmp/get-pip.py" do
-    source "https://bootstrap.pypa.io/get-pip.py"
-end
-bash "ipython install" do
-    code <<-EOS
-        python /tmp/get-pip.py
-        pip install ipython==1.2.1
-    EOS
-end
+package platform_family?("rhel") ? "vim-minimal" : "vim"
 
+case node["platform_family"]
+when "debian"
+    package "ipython"
+when "rhel"
+    # Install via pip
+    remote_file "/tmp/get-pip.py" do
+        source "https://bootstrap.pypa.io/get-pip.py"
+    end
+    bash "ipython install" do
+        code <<-EOS
+            python /tmp/get-pip.py
+            pip install ipython==1.2.1
+        EOS
+    end
+end
