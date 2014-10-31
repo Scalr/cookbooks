@@ -8,7 +8,12 @@ yum_repository "PGDG" do
    enabled     true
    action      :create
 end
-   
+
+# Postgres depends on the latest version (as of 31.10.2014) because it fixes critical security bugs.
+yum_package "openssl" do
+    action :upgrade
+end
+
 node['postgresql']['packages'].each do |pkg| 
     yum_package pkg do
         options '--disablerepo="*" --enablerepo=PGDG'
