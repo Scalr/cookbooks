@@ -5,6 +5,7 @@ description       "Installs and configures all aspects of apache2 using Debian s
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version           "0.12.3"
 name              "apache2"
+depends           "apt"
 recipe            "apache2", "Main Apache configuration"
 recipe            "apache2::mod_alias", "Apache module 'alias' with config file"
 recipe            "apache2::mod_auth_basic", "Apache module 'auth_basic'"
