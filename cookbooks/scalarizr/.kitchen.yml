@@ -30,3 +30,5 @@ suites:
     run_list:
         - recipe[scalarizr::default]
     attributes:
+        scalarizr:
+            branch: "candidate"

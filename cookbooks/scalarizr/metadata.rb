@@ -5,4 +5,6 @@ description      "Installs/Configures scalarizr"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version          "0.0.1"
 depends          "epel"
+depends          "apt"
+depends          "yum"
 name             "scalarizr"

@@ -1,3 +1,3 @@
 default[:scalarizr][:behaviour] = [ "base" ]
 default[:scalarizr][:platform]  = "ec2"
-default[:scalarizr][:branch] = ""
+default[:scalarizr][:branch] = "latest"
