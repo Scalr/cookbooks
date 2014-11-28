@@ -109,10 +109,3 @@ end
 
 behaviours=node[:scalarizr][:behaviour].join(",")
 execute "scalarizr -y --configure -o behaviour=" + behaviours + " -o platform=" + node[:scalarizr][:platform]
-
-if defined? latest and latest
-    execute "scalr-upd-client -r latest"
-else
-    execute "scalr-upd-client -r stable"
-end
-
