@@ -1,6 +1,0 @@
-[scalr] 
-name=scalr
-baseurl=http://rpm.scalr.net/rpm/rhel/$releasever/$basearch
-enabled=1 
-gpgcheck=0 
-
