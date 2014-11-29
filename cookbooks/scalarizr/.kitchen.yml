@@ -26,9 +26,27 @@ platforms:
 
 
 suites:
-  - name: default
+  - name: stable
+    run_list:
+        - recipe[scalarizr::default]
+    attributes:
+        scalarizr:
+            branch: "stable"
+  - name: candidate
     run_list:
         - recipe[scalarizr::default]
     attributes:
         scalarizr:
             branch: "candidate"
+  - name: latest
+    run_list:
+        - recipe[scalarizr::default]
+    attributes:
+        scalarizr:
+            branch: "latest"
+  - name: feature-SCALARIZR-1617
+    run_list:
+        - recipe[scalarizr::default]
+    attributes:
+        scalarizr:
+            branch: "feature-SCALARIZR-1617"

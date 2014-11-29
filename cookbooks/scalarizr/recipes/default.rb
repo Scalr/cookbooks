@@ -104,7 +104,8 @@ if platform_family?("rhel")
          package "python26"
      end
 
-    if platform?("amazon") && node["platform_version"] == '2014.03'
+    if platform?("amazon") && node["platform_version"] == '2014.03' &&
+        ['stable', 'candidate'].include?(node["scalarizr"]["branch"])
         yum_package "python-boto" do
            options "--disablerepo='*' --enablerepo='scalr'"
            flush_cache [:before]
