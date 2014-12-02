@@ -22,7 +22,8 @@ when "debian"
     package "libapache2-mod-rpaf"
 
 when "rhel"
-    package_url = "https://s3.amazonaws.com/scalr-labs/packages/mod_rpaf-0.6-2.el#{node[:platform_version].to_i}.x86_64.rpm"
+    platform_version = platform?("amazon") ? 6 : node["platform_version"].to_i
+    package_url = "https://s3.amazonaws.com/scalr-labs/packages/mod_rpaf-0.6-2.el#{platform_version}.x86_64.rpm"
     path = "/tmp/#{File.basename(package_url)}"
 
     remote_file path do
