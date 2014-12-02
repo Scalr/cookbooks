@@ -28,15 +28,20 @@ when "debian"
 
 when "redhat","centos","oracle","amazon","scientific"
     if not (node[:platform] == 'centos' and node[:platform_version].to_i == 7)
-        execute "rpm -Uvh http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm" do
-            not_if "rpm -q scalr-release-2-1.noarch"
+        platform_version = platform?("amazon") ? 6 : node["platform_version"].to_i
+        package_url = "https://s3.amazonaws.com/scalr-labs/packages/redis-2.8.9-1.el#{platform_version}.x86_64.rpm"
+        path = "/tmp/#{File.basename(package_url)}"
+
+        remote_file path do
+            source package_url
         end
 
-        yum_package "redis" do
-        options '--disablerepo="*" --enablerepo="scalr"'
+        rpm_package "redis" do
+            source path
+            action :install
         end
     else
-        yum_package "redis"
+        package "redis"
     end
 
     cookbook_file "/etc/redis.conf" do
