@@ -17,25 +17,21 @@
 # limitations under the License.
 #
 
-case node[:platform]
-when "debian","ubuntu"
+case node["platform_family"]
+when "debian"
     package "libapache2-mod-rpaf"
 
-when "redhat","centos","oracle","amazon"
-    remote_file "/tmp/scalr-release-2-1.noarch.rpm" do
-        source "http://rpm.scalr.net/rpm/scalr-release-2-1.noarch.rpm"
-        mode "0644"
+when "rhel"
+    package_url = "https://s3.amazonaws.com/scalr-labs/packages/mod_rpaf-0.6-2.el#{node[:platform_version].to_i}.x86_64.rpm"
+    path = "/tmp/#{File.basename(package_url)}"
+
+    remote_file path do
+        source package_url
     end
 
-    package "scalr" do
+    rpm_package "mod_rpaf" do
+        source path
         action :install
-        source "/tmp/scalr-release-2-1.noarch.rpm"
-        provider Chef::Provider::Package::Rpm
-    end
-
-    yum_package "mod_rpaf" do
-        action :install
-        flush_cache [:before]
     end
     
     cookbook_file "/etc/httpd/conf.d/mod_rpaf.conf" do
