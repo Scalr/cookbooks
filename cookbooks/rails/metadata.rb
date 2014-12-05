@@ -5,3 +5,4 @@ description      "Installs/Configures Ruby on Rails to work with apache and pass
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
 version          "0.0.1"
 depends          "apache2"
+name             "rails"
