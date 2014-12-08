@@ -1,56 +1,56 @@
-= DESCRIPTION:
+# DESCRIPTION:
 
 Installs and configures MySQL client or server.
 
-= REQUIREMENTS:
+# REQUIREMENTS:
 
-== Platform:
+## Platform:
 
 Best tested on Ubuntu 9.04,9.10. On EC2, requires platform that supports -o bind option for the 'mount' command.
 
-== Cookbooks:
+## Cookbooks:
 
 Requires Opscode's openssl cookbook for secure password generation.
 
 Requires a C compiler and Ruby development package in order to build mysql gem with native extensions. On Debian and Ubuntu systems this is satisfied by installing the "build-essential" and "ruby-dev" packages before running Chef. See USAGE below for information on how to handle this during a Chef run.
 
-= RESOURCES AND PROVIDERS
+# RESOURCES AND PROVIDERS
 
-The cookbook contains a LWRP, +mysql_database+ which can be used to manage databases through calls to the MySQL API. The mysql gem is installed to make this usable. The provider currently supports three actions:
+The cookbook contains a LWRP, `mysql_database` which can be used to manage databases through calls to the MySQL API. The mysql gem is installed to make this usable. The provider currently supports three actions:
 
-* +flush_tables_with_read_lock+ - sends the sql command "flush tables with read lock", used for setting up mysql master/slave replication.
-* +unflush_tables+ - sends the sql command "unflush tables", used for setting up master/slave replication.
-* +create_db+ - specify a database to be created.
+* `flush_tables_with_read_lock` - sends the sql command "flush tables with read lock", used for setting up mysql master/slave replication.
+* `unflush_tables` - sends the sql command "unflush tables", used for setting up master/slave replication.
+* `create_db` - specify a database to be created.
 
 For example see the USAGE section below.
 
-= ATTRIBUTES:
+# ATTRIBUTES:
 
-* +mysql[:server_root_password]+ - Set the server's root password with this, default is a randomly generated password with +OpenSSL::Random.random_bytes+.
-* +mysql[:server_repl_password]+ - Set the replication user 'repl' password with this, default is a randomly generated password with +OpenSSL::Random.random_bytes+.
-* +mysql[:server_debian_password]+ - Set the debian-sys-maint user password with this, default is a randomly generated password with +OpenSSL::Random.random_bytes+.
-* +mysql[:bind_address]+ - Listen address for MySQLd, default is node's ipaddress.
-* +mysql[:datadir]+ - Location for mysql data directory, default is "/var/lib/mysql"
-* +mysql[:ec2_path]+ - location of mysql datadir on EC2 nodes, default "/mnt/mysql"
+* [`mysql](:server_root_password)` - Set the server's root password with this, default is a randomly generated password with `OpenSSL::Random.random_bytes`.
+* [`mysql](:server_repl_password)` - Set the replication user 'repl' password with this, default is a randomly generated password with `OpenSSL::Random.random_bytes`.
+* [`mysql](:server_debian_password)` - Set the debian-sys-maint user password with this, default is a randomly generated password with `OpenSSL::Random.random_bytes`.
+* [`mysql](:bind_address)` - Listen address for MySQLd, default is node's ipaddress.
+* [`mysql](:datadir)` - Location for mysql data directory, default is "/var/lib/mysql"
+* [`mysql](:ec2_path)` - location of mysql datadir on EC2 nodes, default "/mnt/mysql"
 
 Performance tuning attributes, each corresponds to the same-named parameter in my.cnf; default values listed
 
-* +mysql[:tunable][:key_buffer]+          = "250M"
-* +mysql[:tunable][:max_connections]+     = "800"
-* +mysql[:tunable][:wait_timeout]+        = "180"
-* +mysql[:tunable][:net_write_timeout]+   = "30"
-* +mysql[:tunable][:net_write_timeout]+   = "30"
-* +mysql[:tunable][:back_log]+            = "128"
-* +mysql[:tunable][:table_cache]+         = "128"
-* +mysql[:tunable][:max_heap_table_size]+ = "32M"
+* [`mysql[:tunable]](:key_buffer)`          = "250M"
+* [`mysql[:tunable]](:max_connections)`     = "800"
+* [`mysql[:tunable]](:wait_timeout)`        = "180"
+* [`mysql[:tunable]](:net_write_timeout)`   = "30"
+* [`mysql[:tunable]](:net_write_timeout)`   = "30"
+* [`mysql[:tunable]](:back_log)`            = "128"
+* [`mysql[:tunable]](:table_cache)`         = "128"
+* [`mysql[:tunable]](:max_heap_table_size)` = "32M"
 
-= USAGE:
+# USAGE:
 
 On client nodes,
 
   include_recipe "mysql::client"
 
-This will install the MySQL client libraries and development headers on the system. It will also install the Ruby Gem +mysql+, so that the cookbook's LWRP (above) can be used. This is done during the compile-phase of the Chef run.
+This will install the MySQL client libraries and development headers on the system. It will also install the Ruby Gem `mysql`, so that the cookbook's LWRP (above) can be used. This is done during the compile-phase of the Chef run.
 
   r = package ... do
     action :nothing
@@ -71,7 +71,7 @@ This creates a resource object for the package and does the installation before 
     action :create_db
   end
 
-This will connect to the MySQL server running on localhost as "root" and password as +mysql[:server_root_password]+ attribute (see below) and create the database specified with the +database+ parameter. The provider will attempt to determine whether the database exists first.
+This will connect to the MySQL server running on localhost as "root" and password as [`mysql](:server_root_password)` attribute (see below) and create the database specified with the `database` parameter. The provider will attempt to determine whether the database exists first.
 
 On server nodes,
 
@@ -121,9 +121,9 @@ These cookbooks aren't strict dependencies, and not if the installation process 
 
 For more infromation on the compile vs execution phase of a Chef run:
 
-  http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run
+  [http://wiki.opscode.com/display/chef/Anatomy`of`a`Chef`Run](http://wiki.opscode.com/display/chef/Anatomy`of`a`Chef`Run)
 
-= LICENSE and AUTHOR:
+# LICENSE and AUTHOR:
 
 Author:: Joshua Timberman (<joshua@opscode.com>)
 Author:: AJ Christensen (<aj@opscode.com>)

@@ -1,14 +1,14 @@
-= DESCRIPTION:
+# DESCRIPTION:
 
 Complete Debian/Ubuntu style Apache2 configuration.
 
-= REQUIREMENTS:
+# REQUIREMENTS:
 
 Debian or Ubuntu preferred.
 
 Red Hat/OEL/CentOS and Fedora can be used but will be converted to a Debian/Ubuntu style Apache as it's far easier to manage with chef. 
 
-= ATTRIBUTES:
+# ATTRIBUTES:
 
 The file attributes/apache.rb contains the following attribute types:
 
@@ -19,20 +19,20 @@ The file attributes/apache.rb contains the following attribute types:
 
 General settings and prefork/worker attributes are tunable.
 
-= USAGE:
+# USAGE:
 
 Include the apache2 recipe to install Apache2 and get 'sane' default settings. Configuration is modularized through Apache vhost sites a la Debian style configuration.
 
 For Red Hat, CentOS and Fedora you should first disable selinux as it's not supported (yet), then remove the stock httpd and all it's dependencies prior to attempting to use this recipe. Many packages in these distributions drop conflicting configs into conf.d, all of which haven't been accounted for yet. Starting from scratch will also make it far easier to debug.
 
-== Defines:
+## Defines:
 
 * apache_module: sets up an Apache module.
 * apache_conf: sets up a config file for an apache module.
 * apache_site: sets up a vhost site. The conf file must be available.
 * web_app: copies the template for a web app and enables it as a site via apache_site.
 
-== Web Apps:
+## Web Apps:
 
 Various applications that can be set up with Apache as the front end, such as PHP, Django, Rails and others can use the web_app define to set up the template and the Apache site. The define is kind of dumb, so the template needs have the application implementation settings, since we don't know what your app is or what is needed from Apache.
 
@@ -42,17 +42,17 @@ We only prototype one parameter for the web_app define, "template". This is used
 * server_name
 * server_aliases
 
-These are available as @params[:docroot], @params[:server_name], @params[:server_aliases] within the template. 
+These are available as [@params](:docroot), [@params](:server_name), [@params](:server_aliases) within the template. 
 
 If 'cookbook' and 'template' are not specified, the current cookbook's templates/default/web_app.conf.erb will be used. If this template is not suitable for your application, copy it to your cookbook and customize as needed.
 
-== God Monitor:
+## God Monitor:
 
 There's a new recipe, apache2::god_monitor. You will need to make sure to include the 'god' recipe before using the apache2::god_monitor recipe in your cookbook.
 
-== OpenID Auth
+## OpenID Auth
 
-Installs the mod_auth_openid module from source. Specify an array of OpenIDs that are allowed to authenticate with the attribute apache[:allowed_openids]. Use the following in a vhost to protect with OpenID authentication:
+Installs the mod_auth_openid module from source. Specify an array of OpenIDs that are allowed to authenticate with the attribute [apache](:allowed_openids). Use the following in a vhost to protect with OpenID authentication:
 
     AuthOpenIDEnabled On
     AuthOpenIDDBLocation /var/cache/apache2/mod_auth_openid.db
@@ -60,7 +60,7 @@ Installs the mod_auth_openid module from source. Specify an array of OpenIDs tha
 
 Change the DBLocation as appropriate for your platform. You'll need to change the file in the recipe to match. The UserProgram is optional if you don't want to limit access by certain OpenIDs.
 
-= LICENSE & AUTHOR:
+# LICENSE & AUTHOR:
 
 Author:: Joshua Timberman (<joshua@opscode.com>)
 Copyright:: 2009, Opscode, Inc

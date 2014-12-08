@@ -1,12 +1,12 @@
-= DESCRIPTION:
+# DESCRIPTION:
 
 Library provides a method to generate secure passwords for use in recipes.
 
-= REQUIREMENTS:
+# REQUIREMENTS:
 
 OpenSSL Ruby bindings must be installed, which are a requirement for Chef anyway.
 
-= USAGE:
+# USAGE:
 
 Most often this will be used to generate a secure password for an attribute.
 
@@ -14,7 +14,7 @@ Most often this will be used to generate a secure password for an attribute.
 
     set_unless[:my_password] = secure_password
 
-= LICENSE and AUTHOR:
+# LICENSE and AUTHOR:
 
 Author:: Joshua Timberman (<joshua@opscode.com>)
 

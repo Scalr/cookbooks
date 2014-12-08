@@ -1,18 +1,18 @@
-= DESCRIPTION:
+# DESCRIPTION:
 
 Installs nginx from package OR source code and sets up configuration handling similar to Debian's Apache2 scripts.
 
-= REQUIREMENTS:
+# REQUIREMENTS:
 
-== Cookbooks:
+## Cookbooks:
 
 * build-essential (for nginx::source)
 
-== Platform:
+## Platform:
 
 Debian or Ubuntu though may work where 'build-essential' works, but other platforms are untested.
 
-= ATTRIBUTES:
+# ATTRIBUTES:
 
 * version - sets the version to install.
 * install_path - for nginx::source, sets the --prefix installation.
@@ -22,14 +22,14 @@ Debian or Ubuntu though may work where 'build-essential' works, but other platfo
 * user - user to run as.
 * binary - path to nginx binary.
 * configure_flags - for nginx::source, the flags to use for compilation.
-* gzip* - configure the gzip module.
+** gzip** - configure the gzip module.
 * keepalive - whether to use keepalive.
 * keepalive_timeout
 * worker_processes - number of workers to spawn.
 * worker_connections - number of connections per worker.
 * server_names_hash_bucket_size
 
-= USAGE:
+# USAGE:
 
 Provides two ways to install and configure nginx.
 
@@ -40,7 +40,7 @@ Both recipes implement configuration handling similar to the Debian Apache2 site
 
 There's some redundancy in that the config handling hasn't been separated from the installation method (yet), so use only one of the recipes.
 
-= LICENSE and AUTHOR:
+# LICENSE and AUTHOR:
 
 Author:: Joshua Timberman (<joshua@opscode.com>)
 Author:: Adam Jacob (<adam@opscode.com>)

@@ -1,29 +1,29 @@
-= DESCRIPTION:
+# DESCRIPTION:
 
 Installs memcached and provides a define to set up an instance of memcache via runit.
 
-= REQUIREMENTS:
+# REQUIREMENTS:
 
-== Platform:
+## Platform:
 
 Tested on Ubuntu 8.10-9.10. Uses the memcached init script by default. A runit service can be set up for instances using the included define.
 
-== Cookbooks:
+## Cookbooks:
 
-Opscode cookbooks, http://github.com/opscode/cookbooks/tree/master:
+Opscode cookbooks, [http://github.com/opscode/cookbooks/tree/master:](http://github.com/opscode/cookbooks/tree/master:)
 
 * runit
 
-= ATTRIBUTES: 
+# ATTRIBUTES: 
 
 The following are node attributes passed to the template for the runit service.
 
-* memcached[:memory] - maximum memory for memcached instances.
-* memcached[:user] - user to run memcached as.
-* memcached[:port] - port for memcached to listen on.
-* memcached[:listen] - IP address for memcached to listen on.
+* [memcached](:memory) - maximum memory for memcached instances.
+* [memcached](:user) - user to run memcached as.
+* [memcached](:port) - port for memcached to listen on.
+* [memcached](:listen) - IP address for memcached to listen on.
 
-= USAGE:
+# USAGE:
 
 Simply set the attributes and it will configure the /etc/memcached.conf file. If you want to use multiple memcached instances, you'll need to modify the recipe to disable the startup script and the template in the default recipe.
 
@@ -31,7 +31,7 @@ Use the define, memcached_instance, to set up a runit service for the named memc
 
   memcached_instance "myproj" 
 
-= LICENSE and AUTHOR:
+# LICENSE and AUTHOR:
 
 Author:: Joshua Timberman (<joshua@opscode.com>)
 Author:: Joshua Sierles (<joshua@37signals.com>)
