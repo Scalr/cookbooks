@@ -28,7 +28,7 @@ if node["redis"]["version"]
         when "debian"
             node["redis"]["packages"].fetch(node["redis"]["version"]).fetch(node["platform"])
         when "rhel"
-            platform = platform?("amazon") ? "rhel6" : "#{node[:platform_family]}#{node[:platform_version].to_i}"
+            platform = platform?("amazon") ? "rhel6" : "#{node["platform_family"]}#{node["platform_version"].to_i}"
             node["redis"]["packages"].fetch(node["redis"]["version"]).fetch(platform)
         end
 end

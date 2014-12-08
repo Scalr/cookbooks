@@ -13,7 +13,7 @@ when "rhel"
         if platform?("centos") && node["platform_version"].to_i == 7
             "/usr/pgsql-#{version}/bin/postgresql#{dotless_version}-setup initdb"
         else
-            "service #{node[:postgresql][:service_name]} initdb" 
+            "service #{node['postgresql']['service_name']} initdb" 
         end
 
     default['postgresql']['platform_version'] = platform?("amazon") ? 6 : node["platform_version"].to_i

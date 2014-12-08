@@ -20,7 +20,7 @@ when "debian"
 
 when "rhel"
     include_recipe 'yum'
-    arch = node[:kernel][:machine] =~ /x86_64/ ? 'x86_64' : 'i686'
+    arch = node["kernel"]["machine"] =~ /x86_64/ ? 'x86_64' : 'i686'
     yum_repository  'mongodb' do
         description 'Mongodb repo'
         baseurl     "http://downloads-distro.mongodb.org/repo/redhat/os/#{arch}"

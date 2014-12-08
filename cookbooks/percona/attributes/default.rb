@@ -1,11 +1,11 @@
 default["percona"]["version"] = 
     case node["platform_family"]
     when "debian"
-        if node[:platform] == "debian"
+        if node["platform"] == "debian"
             '5.5'
-        elsif node[:lsb][:release].to_f >= 14.04
+        elsif node["lsb"]["release"].to_f >= 14.04
             '5.6'
-        elsif node[:lsb][:release].to_f >= 12.04
+        elsif node["lsb"]["release"].to_f >= 12.04
             '5.5'
         else
             '5.1'
@@ -13,7 +13,7 @@ default["percona"]["version"] =
     when "rhel"
         if node["platform"] == "centos" && node["platform_version"].to_i == 7
             '56'
-        elsif node[:platform_version].to_f >= 6.0
+        elsif node["platform_version"].to_f >= 6.0
             '55'
         else
             '51'

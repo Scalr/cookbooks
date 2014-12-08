@@ -17,8 +17,8 @@ if platform_family?("rhel")
 
     yum_repository "epel" do
         description "EPEL repo"
-        mirrorlist "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-#{node[:epel][:version]}&arch=$basearch"
-        gpgkey "http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-#{node[:epel][:version]}"
+        mirrorlist "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-#{node["epel"]["version"]}&arch=$basearch"
+        gpgkey "http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-#{node["epel"]["version"]}"
         action :create
     end
 end

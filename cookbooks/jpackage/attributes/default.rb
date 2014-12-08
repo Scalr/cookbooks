@@ -17,4 +17,4 @@
 # limitations under the License.
 #
 
-default[:jpackage][:version] = "5.0"
+default["jpackage"]["version"] = "5.0"

@@ -22,11 +22,11 @@ when "debian"
     package "libapache2-mod-php5"
     package "php5-cli"
     package "php5-mysql"
-    if platform?("ubuntu") and node["platform_version"].to_f < 13.10
-        package "php5-suhosin" do
-            action :install
-            ignore_failure true
-        end
+
+    package "php5-suhosin" do
+        action :install
+        ignore_failure true
+        only_if { platform?("ubuntu") and node["platform_version"].to_f < 13.10 }
     end
 
 when "rhel"
@@ -38,6 +38,6 @@ when "rhel"
               "php"
           end
 
-    package "#{php}"
+    package php
     package "#{php}-mysql"
 end

@@ -19,8 +19,7 @@
 
 include_recipe "java"
 
-case node[:platform]
-when "redhat","centos","fedora","oracle"
+if platform_family?("rhel")
   
   package "yum-priorities" do
     action :install
@@ -30,10 +29,10 @@ when "redhat","centos","fedora","oracle"
     action :nothing
   end
   
-  template "/etc/yum.repos.d/jpackage#{node[:jpackage][:version].sub(/\./,'')}.repo" do
+  template "/etc/yum.repos.d/jpackage#{node['jpackage']['version'].sub(/\./,'')}.repo" do
     mode "0644"
     source "jpackage.repo.erb"
-    notifies :run, resources(:execute => "yum clean all"), :immediately
+    notifies :run, 'execute[yum clean all]', :immediately
   end
   
   # fix the jpackage-utils issue

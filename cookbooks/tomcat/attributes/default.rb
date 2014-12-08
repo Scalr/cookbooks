@@ -5,7 +5,7 @@ if (platform?("ubuntu") && node["platform_version"].to_f < 12.04) ||
     default["tomcat"]["version"] = '6' 
 end
 
-tomcat = "tomcat#{node[:tomcat][:version]}"
+tomcat = "tomcat#{node['tomcat']['version']}"
 
 case node["platform_family"]
 when "debian"

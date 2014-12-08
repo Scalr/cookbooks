@@ -7,11 +7,9 @@
 # All rights reserved - Do Not Redistribute
 #
 
-
-
-case node.platform
-when "redhat", "centos", "fedora", "oracle","amazon"
+case node["platform_family"]
+when "rhel"
   include_recipe "postgresql::redhat"
-when "debian", "ubuntu"
+when "debian"
   include_recipe "postgresql::debian"
 end

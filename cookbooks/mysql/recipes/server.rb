@@ -19,8 +19,7 @@
 
 include_recipe "mysql::client"
 
-case node[:platform]
-when "ubuntu","debian"
+platform_family?("debian")
   package "apparmor" do
     action :purge
   end
