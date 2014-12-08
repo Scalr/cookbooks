@@ -124,9 +124,9 @@ end
 if node["scalarizr"]["behaviour"].include?("app")
     case node["platform_family"]
     when "debian"
-        execute "cp /usr/share/scalr/apache/html/* /var/www/"
+        execute "cp #{node['scalarizr']['html_files']} /var/www/"
     when "rhel"
-        execute "cp /usr/share/scalr/apache/html/* /var/www/html/"
+        execute "cp #{node['scalarizr']['html_files']} /var/www/html/"
     end
 end
 
