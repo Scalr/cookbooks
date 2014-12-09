@@ -3,3 +3,4 @@ source "https://supermarket.getchef.com"
 metadata
 cookbook "apt"
 cookbook "epel", path: "../epel"
+cookbook "apache2", path: "../apache2"

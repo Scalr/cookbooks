@@ -28,10 +28,12 @@ platforms:
 suites:
   - name: stable
     run_list:
+        - recipe[apache2::default]
         - recipe[scalarizr::default]
     attributes:
         scalarizr:
             branch: "stable"
+            behaviour: ["base", "app"]
   - name: candidate
     run_list:
         - recipe[scalarizr::default]
@@ -44,9 +46,11 @@ suites:
     attributes:
         scalarizr:
             branch: "latest"
-  - name: feature-SCALARIZR-1617
+  - name: devel-branch
     run_list:
+        - recipe[apache2::default]
         - recipe[scalarizr::default]
     attributes:
         scalarizr:
-            branch: "feature-SCALARIZR-1617"
+            branch: "master"
+            behaviour: ["base", "app"]
