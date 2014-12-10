@@ -120,13 +120,12 @@ else # debian
     package "scalarizr-#{node['scalarizr']['platform']}"
 end
 
-if node["scalarizr"]["behaviour"].include?("app")
-    execute "copy html" do
-        # Support two versions of the share directory until February 2015
-        environment lazy {{"SOURCE_DIR" => File.exist?("/opt/scalarizr/share/") ? "/opt/scalarizr/share/apache/html/*" : "/usr/share/scalr/apache/html/*",
-                           "DEST_DIR"   => platform_family?("debian") ? "/var/www/" : "/var/www/html/"}}
-        command "cp $SOURCE_DIR $DEST_DIR"
-    end
+execute "copy html" do
+    # Support two versions of the share directory until February 2015
+    environment lazy {{"SOURCE_DIR" => File.exist?("/opt/scalarizr/share/") ? "/opt/scalarizr/share/apache/html/*" : "/usr/share/scalr/apache/html/*",
+                       "DEST_DIR"   => platform_family?("debian") ? "/var/www/" : "/var/www/html/"}}
+    command "cp $SOURCE_DIR $DEST_DIR"
+    only_if { node["scalarizr"]["behaviour"].include?("app") }
 end
 
 execute "scalarizr -y --configure -o behaviour=#{node['scalarizr']['behaviour'].join(',')} -o platform=#{node['scalarizr']['platform']}"
