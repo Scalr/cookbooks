@@ -1,0 +1,32 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-10.04
+    run_list:
+      - recipe[apt]
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+  - name: ubuntu-14.04
+    run_list:
+      - recipe[apt]
+  - name: debian-6.0.8
+    run_list:
+      - recipe[apt]
+  - name: debian-7.4
+    run_list:
+      - recipe[apt]
+  - name: centos-5.10
+  - name: centos-6.4
+
+
+suites:
+  - name: default
+    run_list:
+        - recipe[openssl::default]
+    attributes:
