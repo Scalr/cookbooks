@@ -32,4 +32,4 @@ suites:
         - recipe[tomcat::default]
     attributes:
         tomcat:
-            version: "6"
+            #version: "6"
