@@ -30,3 +30,4 @@ suites:
       - recipe[redis::default]
   attributes:
       redis:
+          version: "2.6"

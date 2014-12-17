@@ -7,13 +7,13 @@
 # All rights reserved - Do Not Redistribute
 #
 
-case node[:platform]
-when "redhat","centos","oracle","scientific","fedora","suse","amazon"
-	packages = %w{ ntp }
-	service_name = "ntpd"
-else
-	packages = %w{ ntp ntpdate }
-	service_name = "ntp"
+case node["platform_family"]
+when "rhel"
+    packages = %w{ ntp }
+    service_name = "ntpd"
+when "debian"
+    packages = %w{ ntp ntpdate }
+    service_name = "ntp"
 end
 
 

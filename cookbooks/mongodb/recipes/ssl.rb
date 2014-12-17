@@ -1,4 +1,4 @@
-case node[:platform_family]
+case node["platform_family"]
 # Debian like os
 when "debian"
     # Install requirements
@@ -11,15 +11,15 @@ when "rhel"
 end
 
 # Get source
-git node[:repository][:dir] do
+git node["repository"]["dir"] do
     repository "git://github.com/mongodb/mongo.git"
-    revision node[:repository][:revision]
+    revision node["repository"]["revision"]
     action :checkout
 end
 
 # Build from source
 bash "install_mongodb" do
-    cwd node[:repository][:dir]
+    cwd node["repository"]["dir"]
     timeout 7200
     returns 0
     code <<-EOH
@@ -35,7 +35,7 @@ service "mongodb" do
     action [ :stop, :disable ]
 end
 
-execute "sudo rm -Rf #{node[:repository][:dir]}"
+execute "sudo rm -Rf #{node['repository']['dir']}"
 
 #Add user
 user "mongodb" do

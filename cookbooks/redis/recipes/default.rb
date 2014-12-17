@@ -4,12 +4,11 @@ else
     include_recipe "redis::regular_install"
 end
 
-if platform_family?("rhel")
-    cookbook_file "/etc/redis.conf" do
-        source node["redis"]["config_file"]
-        owner "redis"
-        group "redis"
-    end
+cookbook_file "/etc/redis.conf" do
+    source node["redis"]["config_file"]
+    owner "redis"
+    group "redis"
+    only_if { platform_family?("rhel") }
 end
 
 service node["redis"]["service_name"] do

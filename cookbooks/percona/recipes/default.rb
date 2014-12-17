@@ -20,12 +20,12 @@ when "debian"
       action :purge
     end
 
-    package "percona-server-server-#{node[:percona][:version]}" do
+    package "percona-server-server-#{node["percona"]["version"]}" do
         action :install
         options "--no-install-recommends"
     end
 
-    package "percona-server-client-#{node[:percona][:version]}"
+    package "percona-server-client-#{node["percona"]["version"]}"
 
     cookbook_file "/etc/mysql/my.cnf" do
         source "my-medium.cnf"

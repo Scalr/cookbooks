@@ -37,25 +37,25 @@ when "stable", "candidate"
         # Remove this and go with normal branch installing once the new candidate hits strider.
         case node["platform_family"]
         when "debian"
-            execute "echo 'deb http://buildbot.scalr-labs.com/apt/debian #{node[:scalarizr][:branch]}/' > /etc/apt/sources.list.d/scalr-branch.list"
+            execute "echo 'deb http://buildbot.scalr-labs.com/apt/debian #{node["scalarizr"]["branch"]}/' > /etc/apt/sources.list.d/scalr-branch.list"
             bash 'pin_repo' do
                 code <<-EOH
-                echo -e 'Package: *\nPin: release a=#{node[:scalarizr][:branch]}\nPin-Priority: 1001\n' > /etc/apt/preferences
+                echo -e 'Package: *\nPin: release a=#{node["scalarizr"]["branch"]}\nPin-Priority: 1001\n' > /etc/apt/preferences
                 EOH
-                not_if "grep -q #{node[:scalarizr][:branch]} /etc/apt/preferences"
+                not_if "grep -q #{node['scalarizr']['branch']} /etc/apt/preferences"
             end
             execute "apt-get update"
         when "rhel"
             package "yum-plugin-priorities" do
-                if node[:platform_version].to_f < 6
+                if node["platform_version"].to_f < 6
                     package_name "yum-priorities"
                 end
             end
-            baseurl = "http://buildbot.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/rhel/$releasever/$basearch"
-            if node[:platform] == "fedora"
-                baseurl = "http://buildbot.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/fedora/$releasever/$basearch"
+            baseurl = "http://buildbot.scalr-labs.com/rpm/#{node['scalarizr']['branch']}/rhel/$releasever/$basearch"
+            if node["platform"] == "fedora"
+                baseurl = "http://buildbot.scalr-labs.com/rpm/#{node['scalarizr']['branch']}/fedora/$releasever/$basearch"
             end
-            execute "echo -e '[scalr-#{node[:scalarizr][:branch]}]\nname=scalr branch\n' > /etc/yum.repos.d/scalr-branch.repo"
+            execute "echo -e '[scalr-#{node["scalarizr"]["branch"]}]\nname=scalr branch\n' > /etc/yum.repos.d/scalr-branch.repo"
             execute "echo -e 'baseurl=#{baseurl}\nenabled=1\ngpgcheck=0\npriority=10' >> /etc/yum.repos.d/scalr-branch.repo"
             execute "yum clean all"
         end
@@ -84,7 +84,7 @@ else
     when "rhel"
         yum_repository "scalr-devel" do
             description "Scalr development repo"
-            baseurl "http://stridercd.scalr-labs.com/rpm/#{node[:scalarizr][:branch]}/rhel/$releasever/$basearch/"
+            baseurl "http://stridercd.scalr-labs.com/rpm/#{node['scalarizr']['branch']}/rhel/$releasever/$basearch/"
             gpgcheck false
             action :create
         end
@@ -104,30 +104,28 @@ if platform_family?("rhel")
          package "python26"
      end
 
-    if platform?("amazon") && node["platform_version"] == '2014.03' &&
-        ['stable', 'candidate'].include?(node["scalarizr"]["branch"])
-        yum_package "python-boto" do
-           options "--disablerepo='*' --enablerepo='scalr'"
-           flush_cache [:before]
-           action :upgrade
-        end
-    end
+     yum_package "python-boto" do
+         options "--disablerepo='*' --enablerepo='scalr'"
+         flush_cache [:before]
+         action :upgrade
+         only_if { platform?("amazon") && node["platform_version"] == '2014.03' &&
+                   ['stable', 'candidate'].include?(node["scalarizr"]["branch"]) }
+     end
 
-    yum_package "scalarizr-#{node[:scalarizr][:platform]}" do
+    yum_package "scalarizr-#{node['scalarizr']['platform']}" do
        options "-x exim"
        flush_cache [:before]
     end
 else # debian
-    package "scalarizr-#{node[:scalarizr][:platform]}"
+    package "scalarizr-#{node['scalarizr']['platform']}"
 end
 
-if node["scalarizr"]["behaviour"].include?("app")
-    execute "copy html" do
-        # Support two versions of the share directory until February 2015
-        environment lazy {{"SOURCE_DIR" => File.exist?("/opt/scalarizr/share/") ? "/opt/scalarizr/share/apache/html/*" : "/usr/share/scalr/apache/html/*",
-                           "DEST_DIR"   => platform_family?("debian") ? "/var/www/" : "/var/www/html/"}}
-        command "cp $SOURCE_DIR $DEST_DIR"
-    end
+execute "copy html" do
+    # Support two versions of the share directory until February 2015
+    environment lazy {{"SOURCE_DIR" => File.exist?("/opt/scalarizr/share/") ? "/opt/scalarizr/share/apache/html/*" : "/usr/share/scalr/apache/html/*",
+                       "DEST_DIR"   => platform_family?("debian") ? "/var/www/" : "/var/www/html/"}}
+    command "cp $SOURCE_DIR $DEST_DIR"
+    only_if { node["scalarizr"]["behaviour"].include?("app") }
 end
 
-execute "scalarizr -y --configure -o behaviour=#{node[:scalarizr][:behaviour].join(',')} -o platform=#{node[:scalarizr][:platform]}"
+execute "scalarizr -y --configure -o behaviour=#{node['scalarizr']['behaviour'].join(',')} -o platform=#{node['scalarizr']['platform']}"

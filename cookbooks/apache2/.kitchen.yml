@@ -23,6 +23,7 @@ platforms:
       - recipe[apt]
   - name: centos-5.10
   - name: centos-6.4
+  - name: centos-7.0
 
 
 suites:
