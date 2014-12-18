@@ -127,5 +127,3 @@ execute "copy html" do
     command "cp $SOURCE_DIR $DEST_DIR"
     only_if { node["scalarizr"]["behaviour"].include?("app") }
 end
-
-execute "scalarizr -y --configure -o behaviour=#{node['scalarizr']['behaviour'].join(',')} -o platform=#{node['scalarizr']['platform']}"
