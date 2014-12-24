@@ -24,6 +24,13 @@ platforms:
     image_id: ami-d2817cba
     username: ec2-user
 
+- name: RHEL-7
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-785bae10
+    flavor_id: m3.xlarge
+    username: ec2-user
+
 suites:
   - name: stable
     run_list:

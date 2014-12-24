@@ -2,5 +2,6 @@ source "https://supermarket.getchef.com"
 
 metadata
 cookbook "apt"
+cookbook "yum", path: "../yum"
 cookbook "epel", path: "../epel"
 cookbook "apache2", path: "../apache2"

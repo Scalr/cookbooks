@@ -20,13 +20,17 @@ name=an test
 baseurl=http://drop.the.baseurl.biz
 enabled=1
 gpgcheck=1
-sslverify=1
+sslverify=true
 '
   end
 
   context 'creating a yum_repository with the :add action alias' do
     it 'adds yum_repository[test3]' do
       expect(test_repository_three_run).to add_yum_repository('test3')
+    end
+
+    it 'steps into yum_repository and upgrades package[ca-certificates]' do
+      expect(test_repository_three_run).to upgrade_package('ca-certificates')
     end
 
     it 'steps into yum_repository and creates template[/etc/yum.repos.d/test3.repo]' do

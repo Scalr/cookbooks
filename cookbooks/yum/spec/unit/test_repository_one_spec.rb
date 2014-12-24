@@ -20,13 +20,17 @@ name=an test
 baseurl=http://drop.the.baseurl.biz
 enabled=1
 gpgcheck=1
-sslverify=1
+sslverify=true
 '
   end
 
   context 'creating a yum_repository with minimal parameters' do
     it 'creates yum_repository[test1]' do
       expect(test_repository_one_run).to create_yum_repository('test1')
+    end
+
+    it 'steps into yum_repository and upgrades package[ca-certificates]' do
+      expect(test_repository_one_run).to upgrade_package('ca-certificates')
     end
 
     it 'steps into yum_repository and creates template[/etc/yum.repos.d/test1.repo]' do
