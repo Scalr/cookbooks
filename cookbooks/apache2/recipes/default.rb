@@ -29,7 +29,7 @@ service node["apache2"]["service_name"] do
     action [:disable, :stop]
 end
 
-if not (node["platform"] == 'centos' and node["platform_version"].to_i == 7) and
+if not (['centos', 'redhat'].include?(node["platform"]) and node["platform_version"].to_i == 7) and
     not (node["apache2"]["package_name"] == "httpd24") then
     include_recipe "apache2::mod_rpaf"
 end
