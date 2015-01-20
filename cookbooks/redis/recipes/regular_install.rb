@@ -27,7 +27,7 @@ when "debian"
     end
 
 when "redhat","centos","oracle","amazon","scientific"
-    if not (node["platform"] == 'centos' and node["platform_version"].to_i == 7)
+    if not (["redhat", "centos"].include?(node["platform"]) and node["platform_version"].to_i == 7)
         platform_version = platform?("amazon") ? 6 : node["platform_version"].to_i
         package_url = "https://s3.amazonaws.com/scalr-labs/packages/redis-2.8.9-1.el#{platform_version}.x86_64.rpm"
         path = "/tmp/#{File.basename(package_url)}"

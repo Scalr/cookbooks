@@ -10,7 +10,7 @@ when "rhel"
                                                    "postgresql#{dotless_version}-server",
                                                    "postgresql#{dotless_version}-devel"]
     default['postgresql']['initdb_command'] =  
-        if platform?("centos") && node["platform_version"].to_i == 7
+        if ['centos', 'redhat'].include?(node['platform']) && node["platform_version"].to_i == 7
             "/usr/pgsql-#{version}/bin/postgresql#{dotless_version}-setup initdb"
         else
             "service #{node['postgresql']['service_name']} initdb" 
