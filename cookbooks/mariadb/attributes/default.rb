@@ -6,6 +6,6 @@ if platform_family?("rhel")
         if platform?("amazon")
             "http://yum.mariadb.org/#{node['mariadb']['version']}/rhel6-#{arch}"
         else
-            "http://yum.mariadb.org/#{node['mariadb']['version']}/#{node['platform']}#{node['platform_version'].to_i}-#{arch}"
+            "http://yum.mariadb.org/#{node['mariadb']['version']}/#{node['platform'].sub(/redhat/, 'rhel')}#{node['platform_version'].to_i}-#{arch}"
         end
 end
