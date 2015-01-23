@@ -11,7 +11,7 @@ default["percona"]["version"] =
             '5.1'
         end
     when "rhel"
-        if node["platform"] == "centos" && node["platform_version"].to_i == 7
+        if ["centos", "redhat"].include?(node["platform"]) && node["platform_version"].to_i == 7
             '56'
         elsif node["platform_version"].to_f >= 6.0
             '55'
