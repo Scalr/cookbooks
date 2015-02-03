@@ -38,27 +38,26 @@ service "memcached" do
     supports :status => true, :start => true, :stop => true, :restart => true
 end
 
-template "/etc/memcached.conf" do
-    source "memcached.conf.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-    variables(
-        :listen => node["memcached"]["listen"],
-        :user => node["memcached"]["user"],
-        :port => node["memcached"]["port"],
-        :memory => node["memcached"]["memory"]
-    )
-    notifies :restart, "service[memcached]", :immediately
+case node["platform_family"]
+when "rhel"
+    memcached_conf = '/etc/sysconfig/memcached'
+    memcached_conf_source = "memcached.sysconfig.erb"
+when "debian"
+    memcached_conf = "/etc/memcached.conf"
+    memcached_conf_source = "memcached.conf.erb"
 end
 
-case node["lsb"]["codename"]
-when "karmic"
-    template "/etc/default/memcached" do
-        source "memcached.default.erb"
-        owner "root"
-        group "root"
-        mode "0644"
-        notifies :restart, "service[memcached]", :immediately
-    end
+template memcached_conf do
+    source memcached_conf_source
+    owner 'root'
+    group 'root'
+    mode '0644'
+    variables(
+        :listen => node['memcached']['listen'],
+        :user => node['memcached']['user'],
+        :port => node['memcached']['port'],
+        :memory => node['memcached']['memory'],
+        :maxconn => node["memcached"]["maxconn"]
+    )
+    notifies :restart, 'service[memcached]'
 end
