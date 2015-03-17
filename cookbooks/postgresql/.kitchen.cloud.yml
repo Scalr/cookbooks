@@ -24,6 +24,13 @@ platforms:
     image_id: ami-d2817cba
     username: ec2-user
 
+- name: Amazon-Linux-201504
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-5231103a
+    username: ec2-user
+
+
 - name: CentOS7
   driver_plugin: ec2
   driver_config:
