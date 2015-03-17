@@ -3,7 +3,7 @@ name =
     when "debian"
         "apache2"
     when "rhel"
-        if platform?("amazon") && node["platform_version"] == "2014.09"
+        if platform?("amazon") && Chef::VersionConstraint.new(">=2014.09").include?(node["platform_version"])
             "httpd24"
         else
             "httpd"

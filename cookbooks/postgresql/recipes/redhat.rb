@@ -10,7 +10,7 @@ yum_repository "PGDG" do
 end
 
 node['postgresql']['packages'].each do |pkg| 
-    if platform?("amazon") && node["platform_version"] == "2014.09"
+    if platform?("amazon") && Chef::VersionConstraint.new(">=2014.09").include?(node["platform_version"])
         yum_package pkg do
             options '--disablerepo="*" --enablerepo=PGDG'
         end
