@@ -32,7 +32,7 @@ when "debian"
 when "rhel"
     php = if platform?("centos") and node["platform_version"].to_f < 6.0
               "php53"
-          elsif platform?("amazon") and node["platform_version"] == "2014.09"
+          elsif platform?("amazon") && Chef::VersionConstraint.new(">=2014.09").include?(node["platform_version"])
               "php54"
           else
               "php"
