@@ -24,7 +24,7 @@ platforms:
     image_id: ami-d2817cba
     username: ec2-user
 
-- name: Amazon-Linux-201504
+- name: Amazon-Linux-201503
   driver_plugin: ec2
   driver_config:
     flavor_id: m3.medium
