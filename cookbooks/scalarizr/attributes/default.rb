@@ -27,9 +27,9 @@ else
     branch = (node['scalarizr']['branch'] == 'candidate')? 'master' : node['scalarizr']['branch']
     case node["platform_family"]
     when "rhel"
-            default['scalarizr']['baseurl'] = "http://stridercd.scalr-labs.com/rpm/#{branch}/rhel/$releasever/$basearch/"
+            default['scalarizr']['baseurl'] = "http://stridercd.scalr-labs.com/scalarizr/rpm/develop/#{branch}/rhel/$releasever/$basearch/"
     when "debian"
-            default['scalarizr']['uri'] = "http://stridercd.scalr-labs.com/apt-plain/"
+            default['scalarizr']['uri'] = "http://stridercd.scalr-labs.com/scalarizr/apt-plain/develop/"
             default['scalarizr']['distribution'] = "#{branch}/"
     end
 end
