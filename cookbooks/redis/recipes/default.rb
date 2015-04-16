@@ -1,7 +1,20 @@
-if node["redis"]["version"]
-    include_recipe "redis::versioned_install"
-else
-    include_recipe "redis::regular_install"
+node["redis"]["install_packages"].each do |pkg|
+    path = File.join(node["redis"]["cache_dir"], pkg.split('/')[-1])
+    provider = case node["platform_family"]
+               when "debian"
+                   Chef::Provider::Package::Dpkg
+               when "rhel"
+                   Chef::Provider::Package::Rpm end
+
+    remote_file path do
+        source pkg
+    end
+
+    package "redis" do
+        source path
+        provider provider
+        action :install
+    end
 end
 
 cookbook_file "/etc/redis.conf" do
