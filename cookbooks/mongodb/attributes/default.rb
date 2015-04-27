@@ -1,7 +1,7 @@
 default["mongodb"]["service_name"] = "mongod"
 
 # Latest minor version extracted from http://downloads-distro.mongodb.org/repo/
-default["mongodb"]["full_versions"] = {"2.4" => {"debian" => "2.4.10", "rhel" => "2.4.10"}, "2.6" => {"debian" => "2.6.4", "rhel" => "2.6.4-1"}}
+default["mongodb"]["full_versions"] = {"2.4" => {"debian" => "2.4.10", "rhel" => "2.4.10"}, "2.6" => {"debian" => "2.6.9", "rhel" => "2.6.9-1"}}
 
 # Default package for unversioned installation
 default["mongodb"]["packages"] = ["mongodb-org"]

@@ -11,11 +11,9 @@ when "debian"
         action :add
     end
 
-    node["mongodb"]["packages"].each do |pkg|
-        package pkg do
-            version node["mongodb"]["full_version"]
-            action :install
-        end
+    package node["mongodb"]["packages"] do
+            # I'm not responsible for this, it's the way Chef works...
+            version [node["mongodb"]["full_version"]] * node["mongodb"]["packages"].length
     end
 
 when "rhel"
