@@ -1,10 +1,10 @@
 name              'apt'
 maintainer        'Chef Software, Inc.'
-maintainer_email  'cookbooks@opscode.com'
+maintainer_email  'cookbooks@chef.io'
 license           'Apache 2.0'
 description       'Configures apt and apt services and LWRPs for managing apt repositories and preferences'
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           '2.4.1'
+version           '2.7.0'
 recipe            'apt', 'Runs apt-get update during compile phase and sets up preseed directories'
 recipe            'apt::cacher-ng', 'Set up an apt-cacher-ng caching proxy'
 recipe            'apt::cacher-client', 'Client for the apt::cacher-ng caching proxy'
@@ -20,6 +20,10 @@ attribute 'apt/cacher-client/restrict_environment',
 attribute 'apt/cacher_port',
           :description => 'Default listen port for the caching server',
           :default => '3142'
+
+attribute 'apt/cacher_ssl_support',
+          :description => 'The caching server supports upstream SSL servers via CONNECT',
+          :default => 'false'
 
 attribute 'apt/cacher_interface',
           :description => 'Default listen interface for the caching server',
