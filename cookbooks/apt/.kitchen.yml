@@ -4,13 +4,15 @@ driver:
 platforms:
   - name: debian-7.2.0
     run_list: apt::default
+  # - name: debian-8.0
+  #   run_list: apt::default
   - name: ubuntu-10.04
     run_list: apt::default
   - name: ubuntu-12.04
     run_list: apt::default
-  - name: ubuntu-13.04
+  - name: ubuntu-14.04
     run_list: apt::default
-  - name: ubuntu-13.10
+  - name: ubuntu-14.10
     run_list: apt::default
 
 suites:
@@ -44,3 +46,13 @@ suites:
     run_list:
       - recipe[minitest-handler]
       - recipe[apt_test::lwrps]
+
+  - name: unattended-upgrades
+    run_list:
+      - recipe[minitest-handler]
+      - recipe[apt_test::unattended-upgrades]
+    attributes:
+      apt:
+        unattended_upgrades:
+          enable: true
+

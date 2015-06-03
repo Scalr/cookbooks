@@ -2,7 +2,7 @@
 # Cookbook Name:: apt_test
 # Recipe:: lwrps
 #
-# Copyright 2012, Opscode, Inc.
+# Copyright 2012, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,13 +20,20 @@
 include_recipe 'apt'
 
 # Apt Repository
-apt_repository 'opscode' do
-  uri 'http://apt.opscode.com'
+apt_repository 'juju' do
+  uri 'http://ppa.launchpad.net/juju/stable/ubuntu'
   components ['main']
-  distribution "#{node['lsb']['codename']}-0.10"
-  key '2940ABA983EF826A'
-  keyserver 'pgpkeys.mit.edu'
+  distribution 'trusty'
+  key 'C8068B11'
+  keyserver 'keyserver.ubuntu.com'
   action :add
+end
+
+# PPA Repository
+apt_repository 'rust' do
+  uri 'ppa:hansjorg/rust'
+  distribution node['lsb']['codename']
+  not_if { node['platform'] == 'debian' }
 end
 
 # Apt Repository with arch
@@ -56,6 +63,15 @@ end
 apt_preference 'chef' do
   pin 'version 10.16.2-1'
   pin_priority '700'
+end
+
+# Preference file renaming
+file '/etc/apt/preferences.d/wget' do
+  action :touch
+end
+
+apt_preference 'wget' do
+  pin 'version 1.13.4-3'
 end
 
 # COOK-2338

@@ -1,8 +1,8 @@
-site :opscode
+source 'https://supermarket.chef.io'
 
 metadata
 
 group :integration do
-  cookbook "minitest-handler"
-  cookbook "apt_test", :path => "./test/cookbooks/apt_test"
+  cookbook 'minitest-handler'
+  cookbook 'apt_test', :path => './test/cookbooks/apt_test'
 end
