@@ -28,7 +28,10 @@ when "rhel"
         not_if { platform?("redhat") }
     end
 when "debian"
-    package "libmemcache-dev" do
+    libmemcached = (platform?("debian") && node["platform_version"].to_i >= 8) ?
+        "libmemcached-dev" :
+        "libmemcache-dev"
+    package libmemcached do
         action :upgrade
     end
 end
