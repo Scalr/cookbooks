@@ -6,7 +6,7 @@ when "debian"
         uri "http://downloads-distro.mongodb.org/repo/#{platform}"
         distribution 'dist'
         components ['10gen']
-        keyserver 'hkp://keyserver.ubuntu.com:80'
+        keyserver 'keyserver.ubuntu.com'
         key '7F0CEB10'
         action :add
     end
