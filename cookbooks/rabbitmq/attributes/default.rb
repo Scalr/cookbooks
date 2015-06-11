@@ -4,7 +4,10 @@ default["rabbitmq"]["packages"] = {"3.3" =>
                                     "rhel"   => "https://s3.amazonaws.com/scalr-labs/packages/rabbitmq-server-3.3.5-1.noarch.rpm"},
                                     "3.4" =>
                                    {"debian" => "https://s3.amazonaws.com/scalr-labs/packages/rabbitmq-server_3.4.2-1_all.deb",
-                                    "rhel"   => "https://s3.amazonaws.com/scalr-labs/packages/rabbitmq-server-3.4.2-1.noarch.rpm"}}
+                                    "rhel"   => "https://s3.amazonaws.com/scalr-labs/packages/rabbitmq-server-3.4.2-1.noarch.rpm"},
+                                    "3.5" =>
+                                   {"debian" => "https://s3.amazonaws.com/scalr-labs/packages/rabbitmq-server_3.5.3-1_all.deb",
+                                    "rhel"   => "https://s3.amazonaws.com/scalr-labs/packages/rabbitmq-server-3.5.3-1.noarch.rpm"}}
 
 default["rabbitmq"]["cache_dir"] = "/tmp"
 
