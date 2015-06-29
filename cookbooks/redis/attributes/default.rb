@@ -26,7 +26,12 @@ default["redis"]["packages"] = {"2.4" =>
                                 "3.0" =>
                                 {"ubuntu" => ["https://s3.amazonaws.com/scalr-labs/packages/libjemalloc1_3.6.0-1chl1~lucid1_amd64.deb",
                                               "https://s3.amazonaws.com/scalr-labs/packages/redis-tools_3.0.0-1chl1~lucid1_amd64.deb",
-                                              "https://s3.amazonaws.com/scalr-labs/packages/redis-server_3.0.0-1chl1~lucid1_amd64.deb"]}}
+                                              "https://s3.amazonaws.com/scalr-labs/packages/redis-server_3.0.0-1chl1~lucid1_amd64.deb"],
+                                 "rhel6" => ["https://s3.amazonaws.com/scalr-labs/packages/jemalloc-3.6.0-1.el6.x86_64.rpm",
+                                             "https://s3.amazonaws.com/scalr-labs/packages/redis-3.0.2-1.el6.remi.x86_64.rpm"],
+                                 "rhel7" => ["https://s3.amazonaws.com/scalr-labs/packages/jemalloc-3.6.0-1.el7.x86_64.rpm",
+                                             "https://s3.amazonaws.com/scalr-labs/packages/redis-3.0.2-1.el7.remi.x86_64.rpm"]}}
+
 if node["redis"]["version"]
     default["redis"]["install_packages"] =
         case node["platform_family"]
