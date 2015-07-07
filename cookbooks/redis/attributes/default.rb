@@ -1,5 +1,10 @@
 default["redis"]["cache_dir"] = "/tmp"
-default["redis"]["version"] = "2.8"
+if node["platform"] == "debian"
+  # TODO(r.bezruchko) add 3.0.x debian packages
+  default["redis"]["version"] = "2.8" 
+else
+  default["redis"]["version"] = "3.0"
+end
 
 default["redis"]["packages"] = {"2.4" =>
                                 {"ubuntu" => ["https://s3.amazonaws.com/scalr-labs/packages/redis-server_2.4.18-rwky1~oneiric_amd64.deb"],
