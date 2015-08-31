@@ -25,13 +25,14 @@ end
 
 package node["apache2"]["package_name"]
 
-service node["apache2"]["service_name"] do
-    action [:disable, :stop]
-end
-
 if not (['centos', 'redhat'].include?(node["platform"]) and node["platform_version"].to_i == 7) and
     not (node["apache2"]["package_name"] == "httpd24") then
     include_recipe "apache2::mod_rpaf"
 end
 include_recipe "apache2::mod_php5"
 include_recipe "apache2::mod_ssl"
+
+service node["apache2"]["service_name"] do
+    action [:disable, :stop]
+end
+
