@@ -36,3 +36,8 @@ service node["apache2"]["service_name"] do
     action [:disable, :stop]
 end
 
+# bug in debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=751638
+# need to disable the service manually
+if node["platform"] == "debian" and node["platform_version"].to_i == 8
+    execute "systemctl disable apache2"
+end
