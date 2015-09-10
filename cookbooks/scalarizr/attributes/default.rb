@@ -3,33 +3,17 @@ default["scalarizr"]["platform"]  = "ec2"
 default["scalarizr"]["branch"] = "latest"
 
 
-case node['scalarizr']['branch']
-when "stable"
-    default['scalarizr']['repo_name'] = "scalr"
-    case node["platform_family"]
-    when "rhel"
-            default['scalarizr']['baseurl'] = "http://rpm-delayed.scalr.net/rpm/rhel/$releasever/$basearch/"
-    when "debian"
-            default['scalarizr']['uri'] = "http://apt-delayed.scalr.net/debian/"
-            default['scalarizr']['distribution'] = "scalr/"
-    end
-when "latest", "" # Empty branch string also means we want latest
-    default['scalarizr']['repo_name'] = "scalr"
-    case node["platform_family"]
-    when "rhel"
-            default['scalarizr']['baseurl'] = "http://repo.scalr.net/rpm/latest/rhel/$releasever/$basearch/"
-    when "debian"
-            default['scalarizr']['uri'] = "http://repo.scalr.net/apt-plain"
-            default['scalarizr']['distribution'] = "latest/"
-    end
-else
-    default['scalarizr']['repo_name'] = "scalr-devel"
-    branch = (node['scalarizr']['branch'] == 'candidate')? 'master' : node['scalarizr']['branch']
-    case node["platform_family"]
-    when "rhel"
-            default['scalarizr']['baseurl'] = "http://stridercd.scalr-labs.com/scalarizr/rpm/develop/#{branch}/rhel/$releasever/$basearch/"
-    when "debian"
-            default['scalarizr']['uri'] = "http://stridercd.scalr-labs.com/scalarizr/apt-plain/develop/"
-            default['scalarizr']['distribution'] = "#{branch}/"
-    end
-end
+repo_name = case node['scalarizr']['branch']
+            when "stable"
+                "stable"
+            when "latest", "" # Empty branch string also means we want latest
+                "latest"
+            else
+                "stridercd"
+            end
+branch = (repo_name == 'stridercd') ? node['scalarizr']['branch'] : ''
+
+default['scalarizr']['script_url'] =
+    "https://my.scalr.net/public/linux/#{repo_name}/#{node['scalarizr']['platform']}/#{branch}/install_scalarizr.sh"
+
+default['scalarizr']['script_path'] = "#{Chef::Config['file_cache_path']}/#{File.basename(node['scalarizr']['script_url'])}"
