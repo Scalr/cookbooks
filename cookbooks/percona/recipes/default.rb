@@ -27,11 +27,6 @@ when "debian"
 
     package "percona-server-client-#{node["percona"]["version"]}"
 
-    cookbook_file "/etc/mysql/my.cnf" do
-        source "my-medium.cnf"
-        mode "0644"
-    end
-
 when "rhel"
     package "mysql" do
       action :purge
@@ -50,14 +45,15 @@ when "rhel"
     end
 
     yum_package "Percona-Server-client-#{version}"
-
-    cookbook_file "/etc/my.cnf" do
-      source "my-medium.cnf"
-          mode "0644"
-    end
 end
 
 
 service "mysql" do
     action [:disable, :stop]
+end
+
+# bug in debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=751638
+#  need to disable the service manually
+if node["platform"] == "debian" and node["platform_version"].to_i == 8
+    execute "systemctl disable mysql"
 end
