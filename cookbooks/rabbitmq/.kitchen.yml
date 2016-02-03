@@ -32,4 +32,4 @@ suites:
         - recipe[rabbitmq::default]
     attributes:
         rabbitmq:
-            version: "3.3"
+            version: "3.6"
