@@ -16,8 +16,8 @@ default["rabbitmq"]["packages"] = {
 default["esl_erlang"]["packages"] = {
     "debian" => "https://s3.amazonaws.com/scalr-labs/packages/esl-erlang_18.2-1~debian~wheezy_amd64.deb",
     "rhel" => {
-        "6" => "https://s3.amazonaws.com/scalr-labs/packages/erlang-18.2-1.el6.x86_64.rpm",
-        "7" => "https://s3.amazonaws.com/scalr-labs/packages/erlang-18.2-1.el7.centos.x86_64.rpm"}}
+        6 => "https://s3.amazonaws.com/scalr-labs/packages/erlang-18.2-1.el6.x86_64.rpm",
+        7 => "https://s3.amazonaws.com/scalr-labs/packages/erlang-18.2-1.el7.centos.x86_64.rpm"}}
 
 default["packages"]["cache_dir"] = "/tmp"
 
@@ -29,7 +29,7 @@ default["esl_erlang"]["package_url"] =
     if node["platform_family"] == "debian"
         esl_erlang_packages
     elsif node["platform"] == "amazon"
-        esl_erlang_packages["6"]
+        esl_erlang_packages[6]
     else
         esl_erlang_packages.fetch(node["platform_version"].to_i)
     end

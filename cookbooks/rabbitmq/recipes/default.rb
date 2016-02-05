@@ -37,6 +37,8 @@ execute "install-dependencies" do
         command "apt-get -yf install"
         action :run
         only_if { File.exists?(node["esl_erlang"]["package_path"])}
+    when "rhel"
+        action :nothing
     end
 end
 
