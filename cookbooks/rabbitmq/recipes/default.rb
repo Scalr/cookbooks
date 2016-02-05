@@ -19,7 +19,7 @@ package "erlang" do
     when "custom"
         source node["esl_erlang"]["package_path"]
         provider node["packages"]["package_provider"]
-        ignore_failure  platform_family?("debian") ? true : false
+        ignore_failure  platform_family?("debian")
     end
     action :install
 end
