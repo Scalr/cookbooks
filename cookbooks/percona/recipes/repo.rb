@@ -17,7 +17,7 @@ when "rhel"
     include_recipe "yum"
     yum_repository "percona" do
         description "Percona YUM repo"
-        baseurl     "http://repo.percona.com/centos/#{platform?(:amazon) ? 6 : '$releasever'}/os/$basearch/"
+        baseurl     "http://repo.percona.com/centos/#{node['percona']['releasever']}/os/$basearch/"
         gpgkey      "http://www.percona.com/downloads/RPM-GPG-KEY-percona"
         gpgcheck    true
         sslverify   true
