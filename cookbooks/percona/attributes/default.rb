@@ -19,3 +19,7 @@ default["percona"]["version"] =
             '51'
         end
     end
+
+if platform_family?("rhel")
+    default["percona"]["releasever"] = platform?("amazon") ? 6 : node["platform_version"].to_i
+end
