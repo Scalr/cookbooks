@@ -3,10 +3,10 @@ driver:
    name: ec2
    aws_ssh_key_id: <%= ENV['AWS_VAGRANT_SSH_KEY_NAME'] %>
    availability_zone: us-east-1d
+   associate_public_ip: true
 
 transport:
     ssh_key: <%= ENV['AWS_VAGRANT_SSH_KEY'] %>
-    associate_public_ip: true
     interface: public
     ssh_retries: 10
 
