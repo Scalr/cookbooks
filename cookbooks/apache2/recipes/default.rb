@@ -29,7 +29,7 @@ if not (['centos', 'redhat'].include?(node["platform"]) and node["platform_versi
     not (node["apache2"]["package_name"] == "httpd24") then
     include_recipe "apache2::mod_rpaf"
 end
-include_recipe "apache2::mod_php5"
+include_recipe "apache2::mod_php"
 include_recipe "apache2::mod_ssl"
 
 service node["apache2"]["service_name"] do
