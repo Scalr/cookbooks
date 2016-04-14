@@ -1,11 +1,14 @@
 ---
 driver:
    name: ec2
-   aws_access_key_id: <%= ENV['EC2_ACCESS_KEY'] %>
-   aws_secret_access_key: <%= ENV['EC2_SECRET_KEY'] %>
-   aws_ssh_key_id: vagrant
-   ssh_key: <%= ENV['EC2_VAGRANT_SSH_KEY'] %>
-   availability_zone: us-east-1c
+   aws_ssh_key_id: <%= ENV['AWS_VAGRANT_SSH_KEY_NAME'] %>
+   availability_zone: us-east-1d
+   associate_public_ip: true
+
+transport:
+    ssh_key: <%= ENV['AWS_VAGRANT_SSH_KEY'] %>
+    interface: public
+    ssh_retries: 10
 
 provisioner:
   name: chef_zero
@@ -16,7 +19,18 @@ platforms:
   driver_plugin: ec2
   driver_config:
     image_id: ami-50842d38 
+  transport:
     username: ec2-user
+
+- name: Ubuntu-16-04
+  driver_plugin: ec2
+  driver_config:
+      image_id: ami-c45b54ae
+      instance_type: m3.medium
+      subnet_id: subnet-1c938645
+  transport:
+      username: ubuntu
+
 
 suites:
 - name: default

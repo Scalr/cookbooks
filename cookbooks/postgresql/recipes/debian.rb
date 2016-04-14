@@ -16,4 +16,6 @@ service node['postgresql']['service_name'] do
   action [:disable, :stop]
 end
 
+execute node['postgresql']['initdb_command'] if node['postgresql']['initdb_command']
+
 execute "sed -i \"s/.*listen_addresses.*/listen_addresses = '*'/g\" #{node['postgresql']['dir']}/postgresql.conf"

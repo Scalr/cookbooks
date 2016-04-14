@@ -23,4 +23,10 @@ when "debian"
      default['postgresql']['service_name'] = "postgresql"
      default['postgresql']['packages'] = ["postgresql-#{version}"] 
      default['postgresql']['pgdg']['release_apt_codename'] = node['lsb']['codename']
+     default['postgresql']['initdb_command'] =
+         if platform?('ubuntu') and node['platform_version'].to_f >= 16.04 then
+             "export LC_ALL=C;pg_createcluster #{node['postgresql']['version']} main"
+         else
+             nil
+         end
 end
