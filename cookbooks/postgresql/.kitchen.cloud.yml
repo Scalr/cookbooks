@@ -56,7 +56,7 @@ platforms:
 - name: Ubuntu-16-04
   driver_plugin: ec2
   driver_config:
-      image_id: ami-c45b54ae
+      image_id: ami-840910ee
       instance_type: m3.medium
       subnet_id: subnet-1c938645
   transport:
