@@ -27,6 +27,11 @@ when "debian"
 
     package "percona-server-client-#{node["percona"]["version"]}"
 
+    cookbook_file "/etc/mysql/my.cnf" do
+        source "my-medium.cnf"
+        mode "0644"
+    end
+
 when "rhel"
     package "mysql" do
       action :purge
@@ -45,6 +50,11 @@ when "rhel"
     end
 
     yum_package "Percona-Server-client-#{version}"
+
+    cookbook_file "/etc/my.cnf" do
+      source "my-medium.cnf"
+          mode "0644"
+    end
 end
 
 
