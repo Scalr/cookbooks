@@ -9,9 +9,9 @@ repo_name = case node['scalarizr']['branch']
             when "latest", "" # Empty branch string also means we want latest
                 "latest"
             else
-                "stridercd"
+                "drone"
             end
-branch = (repo_name == 'stridercd') ? node['scalarizr']['branch'] : ''
+branch = (repo_name == 'drone') ? node['scalarizr']['branch'] : ''
 
 default['scalarizr']['script_url'] =
     "https://my.scalr.net/public/linux/#{repo_name}/#{node['scalarizr']['platform']}/#{branch}/install_scalarizr.sh"
