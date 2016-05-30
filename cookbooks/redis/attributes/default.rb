@@ -12,7 +12,8 @@ default["redis"]["packages"] = {"2.4" =>
                                  "rhel5" => ["https://s3.amazonaws.com/scalr-labs/packages/redis-2.4.10-1.el5.x86_64.rpm"],
                                  "rhel6" => ["https://s3.amazonaws.com/scalr-labs/packages/redis-2.4.10-1.el6.x86_64.rpm"]},
                                 "2.6" =>
-                                 {"ubuntu" => ["https://s3.amazonaws.com/scalr-labs/packages/redis-server_2.6.13-1chl1~oneiric1_amd64.deb"],
+                                {"ubuntu" => ["https://s3.amazonaws.com/scalr-labs/packages/libjemalloc1_3.6.0-1chl1~lucid1_amd64.deb",
+                                              "https://s3.amazonaws.com/scalr-labs/packages/redis-server_2.6.13-1chl1~oneiric1_amd64.deb"],
                                   "debian" => ["https://s3.amazonaws.com/scalr-labs/packages/libjemalloc1_3.3.1-1.squeeze_amd64.deb",
                                                "https://s3.amazonaws.com/scalr-labs/packages/redis-server_2.6.13-1~bpo70%2B1%2Bb1_amd64.deb"],
                                   "rhel5" => ["https://s3.amazonaws.com/scalr-labs/packages/jemalloc-3.6.0-2.el5.x86_64.rpm", 
