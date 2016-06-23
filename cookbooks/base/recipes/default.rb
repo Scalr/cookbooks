@@ -1,3 +1,4 @@
+include_recipe "apt" if platform_family?("debian")
 include_recipe "ntp"
   
 if node["platform"] == "oracle"
