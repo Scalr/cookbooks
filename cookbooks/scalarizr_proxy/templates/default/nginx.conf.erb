@@ -4,7 +4,7 @@
 # in 'x-receiver-host' header and port given in 'x-receiver-port'
 #
 
-user www-data;
+user <%= @user %>;
 worker_processes 2;
 pid /var/run/nginx.pid;
 
@@ -64,7 +64,7 @@ http {
             allow <%= addr %>;
             <% end -%>
             deny all;
-            
+
             proxy_pass  http://$http_x_receiver_host:$http_x_receiver_port;
             proxy_redirect off;
             proxy_buffering off;

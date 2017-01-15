@@ -18,7 +18,8 @@ template "/etc/nginx/nginx.conf" do
   owner "root"
   group "root"
   variables({
-    :scalr_whitelist => node['scalarizr_proxy']['whitelist']
+    :scalr_whitelist => node['scalarizr_proxy']['whitelist'],
+    :user => node['scalarizr_proxy']['nginx_user']
   })
 end
 
