@@ -9,7 +9,7 @@ when "debian"
         components   ["main"]
         #keyserver    "keys.gnupg.net"
         keyserver    "keyserver.ubuntu.com"
-        key          "CD2EFD2A"
+        key          "8507EFA5"
         action       :add
     end
     
