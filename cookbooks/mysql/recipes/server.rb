@@ -20,9 +20,6 @@
 include_recipe "mysql::client"
 
 if platform_family?("debian")
-  package "apparmor" do
-    action :purge
-  end
   execute "apt-get update"
 end
 
