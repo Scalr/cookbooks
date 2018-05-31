@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'yum_test::test_globalconfig_one' do
   let(:test_global_config_one_run) do
-    ChefSpec::Runner.new(
-      :step_into => 'yum_globalconfig'
-      ).converge(described_recipe)
+    ChefSpec::SoloRunner.new(
+      step_into: 'yum_globalconfig'
+    ).converge(described_recipe)
   end
 
   let(:test_globalconfig_one_content) do
@@ -18,6 +18,7 @@ exactarch=1
 gpgcheck=1
 installonly_limit=3
 keepcache=0
+localpkg_gpgcheck=0
 logfile=/var/log/yum.log
 obsoletes=1
 plugins=1'

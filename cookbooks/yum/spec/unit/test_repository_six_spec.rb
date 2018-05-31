@@ -2,9 +2,11 @@ require 'spec_helper'
 
 describe 'yum_test::test_repository_six' do
   let(:test_repository_six_run) do
-    ChefSpec::Runner.new(
-      :step_into => 'yum_repository'
-      ).converge(described_recipe)
+    ChefSpec::SoloRunner.new(
+      platform: 'centos',
+      version: '6.8',
+      step_into: 'yum_repository'
+    ).converge(described_recipe)
   end
 
   let(:test_repository_six_template) do
@@ -16,11 +18,10 @@ describe 'yum_test::test_repository_six' do
 # Do NOT modify this file by hand.
 
 [test6]
-name=an test
+name=a test
 baseurl=http://drop.the.baseurl.biz
 enabled=1
 gpgcheck=1
-sslverify=true
 '
   end
 
@@ -29,16 +30,16 @@ sslverify=true
       expect(test_repository_six_run).to create_yum_repository('test6')
     end
 
-    it 'steps into yum_repository and upgrades package[ca-certificates]' do
-      expect(test_repository_six_run).to upgrade_package('ca-certificates')
-    end
-
     it 'steps into yum_repository and creates template[/etc/yum.repos.d/test6.repo]' do
       expect(test_repository_six_run).to create_template('/etc/yum.repos.d/test6.repo')
     end
 
     it 'steps into yum_repository and renders file[/etc/yum.repos.d/test6.repo]' do
       expect(test_repository_six_run).to render_file('/etc/yum.repos.d/test6.repo').with_content(test_repository_six_content)
+    end
+
+    it 'steps into yum_repository and runs execute[yum clean metadata test6]' do
+      expect(test_repository_six_run).to_not run_execute('yum clean metadata test6')
     end
 
     it 'steps into yum_repository and runs execute[yum-makecache-test6]' do
@@ -57,5 +58,4 @@ sslverify=true
       expect(test_repository_six_template).to notify('ruby_block[yum-cache-reload-test6]')
     end
   end
-
 end

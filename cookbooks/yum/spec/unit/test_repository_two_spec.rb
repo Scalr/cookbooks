@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe 'yum_test::test_repository_two' do
-
   let(:test_repository_two_run) do
-    ChefSpec::Runner.new(
-      :step_into => 'yum_repository'
-      ).converge(described_recipe)
+    ChefSpec::SoloRunner.new(
+      step_into: 'yum_repository'
+    ).converge(described_recipe)
   end
 
   let(:test_repository_two_template) do
@@ -39,6 +38,7 @@ priority=10
 proxy=http://hellothereiamproxystring.biz
 proxy_username=kermit
 proxy_password=dafrog
+repo_gpgcheck=1
 retries=10
 skip_if_unavailable=1
 sslcacert=/path/to/directory
@@ -54,16 +54,16 @@ timeout=10
       expect(test_repository_two_run).to create_yum_repository('test2')
     end
 
-    it 'steps into yum_repository and upgrades package[ca-certificates]' do
-      expect(test_repository_two_run).to upgrade_package('ca-certificates')
-    end
-
     it 'steps into yum_repository and creates template[/etc/yum.repos.d/unit-test-2.repo]' do
       expect(test_repository_two_run).to create_template('/etc/yum.repos.d/unit-test-2.repo')
     end
 
     it 'steps into yum_repository and renders file[/etc/yum.repos.d/unit-test-2.repo]' do
       expect(test_repository_two_run).to render_file('/etc/yum.repos.d/unit-test-2.repo').with_content(test_repository_two_content)
+    end
+
+    it 'steps into yum_repository and runs execute[yum clean metadata unit-test2]' do
+      expect(test_repository_two_run).to_not run_execute('yum clean metadata unit-test-2')
     end
 
     it 'steps into yum_repository and runs execute[yum-makecache-unit-test-2]' do
@@ -82,5 +82,4 @@ timeout=10
       expect(test_repository_two_template).to notify('ruby_block[yum-cache-reload-unit-test-2]')
     end
   end
-
 end
