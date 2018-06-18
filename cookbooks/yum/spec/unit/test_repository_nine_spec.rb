@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'yum_test::test_repository_nine' do
   let(:test_repository_nine_run) do
-    ChefSpec::Runner.new(
-      :step_into => 'yum_repository'
-      ).converge(described_recipe)
+    ChefSpec::SoloRunner.new(
+      step_into: 'yum_repository'
+    ).converge(described_recipe)
   end
 
   let(:test_repository_nine_template) do
@@ -22,22 +22,18 @@ Have a nice day.
     it 'creates yum_repository[test9]' do
       expect(test_repository_nine_run).to create_yum_repository('test9')
         .with(
-        :source => 'custom_template.erb',
-        :description => 'an test',
-        :baseurl => 'http://drop.the.baseurl.biz',
-        :enabled => false
+          source: 'custom_template.erb',
+          description: 'a test',
+          baseurl: 'http://drop.the.baseurl.biz',
+          enabled: false
         )
-    end
-
-    it 'steps into yum_repository and upgrades package[ca-certificates]' do
-      expect(test_repository_nine_run).to upgrade_package('ca-certificates')
     end
 
     it 'steps into yum_repository and creates template[/etc/yum.repos.d/test9.repo]' do
       expect(test_repository_nine_run).to create_template('/etc/yum.repos.d/test9.repo')
         .with(
-        :path => '/etc/yum.repos.d/test9.repo',
-        :source => 'custom_template.erb'
+          path: '/etc/yum.repos.d/test9.repo',
+          source: 'custom_template.erb'
         )
     end
 
@@ -46,10 +42,17 @@ Have a nice day.
         .with_content(test_repository_nine_content)
     end
 
+    it 'steps into yum_repository and runs execute[yum clean metadata test9]' do
+      expect(test_repository_nine_run).to_not run_execute('yum clean metadata test9')
+        .with(
+          command: 'yum clean metadata --disablerepo=* --enablerepo=test9'
+        )
+    end
+
     it 'steps into yum_repository and runs execute[yum-makecache-test9]' do
       expect(test_repository_nine_run).to_not run_execute('yum-makecache-test9')
         .with(
-        :command => 'yum -q makecache --disablerepo=* --enablerepo=test9'
+          command: 'yum -q makecache --disablerepo=* --enablerepo=test9'
         )
     end
 
@@ -65,5 +68,4 @@ Have a nice day.
       expect(test_repository_nine_template).to notify('ruby_block[yum-cache-reload-test9]')
     end
   end
-
 end

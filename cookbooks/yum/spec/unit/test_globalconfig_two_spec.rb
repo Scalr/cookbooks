@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'yum_test::test_globalconfig_two' do
   let(:test_globalconfig_two_run) do
-    ChefSpec::Runner.new(
-      :step_into => 'yum_globalconfig'
-      ).converge(described_recipe)
+    ChefSpec::SoloRunner.new(
+      step_into: 'yum_globalconfig'
+    ).converge(described_recipe)
   end
 
   let(:test_globalconfig_two_content) do
@@ -51,7 +51,7 @@ installroot=/over/there
 keepalive=true
 keepcache=1
 kernelpkgnames=dowhatnow
-localpkg_gpgcheck=true
+localpkg_gpgcheck=1
 logfile=/your/logs/here
 max_retries=10
 mdpolicy=instant

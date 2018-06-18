@@ -3,17 +3,24 @@ driver:
 
 provisioner:
   name: chef_zero
+  deprecations_as_errors: true
+  require_chef_omnibus: 12.12.15 # a chef release without yum built in
+
+verifier:
+  name: inspec
 
 platforms:
-  - name: centos-5.10
-  - name: centos-5.10-i386
-  - name: centos-6.5
-  - name: centos-6.5-i386
-  - name: fedora-19
-  - name: fedora-20
+  - name: centos-6.8
+  - name: centos-7.3
+  - name: fedora-25
 
 suites:
   - name: default
     run_list:
       - recipe[yum::default]
-      - recipe[yum_test::test_repo]
+      - recipe[yum_test::test_globalconfig_two]
+  - name: dnf_compat
+    run_list:
+      - recipe[yum::dnf_yum_compat]
+      - recipe[yum_test::test_dnf_compat]
+    includes: fedora-25
