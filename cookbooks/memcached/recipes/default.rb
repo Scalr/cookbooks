@@ -25,7 +25,7 @@ case node["platform_family"]
 when "rhel"
     package "libmemcached-devel" do
         action :upgrade
-        not_if { platform?("redhat") }
+        not_if { platform?("redhat") || platform?("centos")}
     end
 when "debian"
     libmemcached = (platform?("debian") && node["platform_version"].to_i >= 8) ?
