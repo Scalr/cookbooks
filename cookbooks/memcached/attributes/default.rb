@@ -6,16 +6,18 @@ default['memcached']['maxconn'] = 1024
 case node['platform_family']
 when 'rhel'
     default['memcached']['user'] = 'memcached'
-    default['memcached']['libmemcached'] = "libmemcached-devel"
 when 'debian'
     default['memcached']['user'] = 'nobody'
-    default['memcached']['libmemcached'] =
-        if platform?("debian") && node["platform_version"].to_i >= 8
-                "libmemcached-dev"
-        elsif platform?("ubuntu") && node["platform_version"].to_i >= 18
-                "libmemcached-dev"
-        else
-            "libmemcache-dev"
-        end
+
 end
 
+is_debian_ge_8 = platform?("debian") && node["platform_version"].to_i >= 8
+is_ubuntu_ge_18 = platform?("ubuntu") && node["platform_version"].to_i >= 18
+is_rhel = platform_family?("rhel")
+
+default['memcached']['libmemcached'] =
+    if is_debian_ge_8 || is_ubuntu_ge_18 || is_rhel
+        "libmemcached-dev"
+    else
+        "libmemcache-dev"
+    end
