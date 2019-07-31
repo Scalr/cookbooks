@@ -8,7 +8,6 @@ when 'rhel'
     default['memcached']['user'] = 'memcached'
 when 'debian'
     default['memcached']['user'] = 'nobody'
-
 end
 
 is_debian_ge_8 = platform?("debian") && node["platform_version"].to_i >= 8
